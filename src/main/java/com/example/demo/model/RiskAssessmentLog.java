@@ -18,5 +18,5 @@ public class RiskAssessmentLog{
     private Double dtiRatio;
     private String creditCheckStatus;
 
-    private Timestamp timestamp = new Timestamp
+    private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 }
