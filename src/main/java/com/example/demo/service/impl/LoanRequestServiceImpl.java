@@ -16,7 +16,13 @@ implements LoanRequestService{
     public LoanRequest submitLoanRequest(LoanRequest request){
         return repo.save(request);
     }
-    public List<LoanRequest>getRequestByUser(Long ){
-        return repo.save
+    public List<LoanRequest>getRequestByUser(Long userId){
+        return repo.findByUserId(userId);
+    }
+    public LoanRequest getRequestById(Long id){
+        return repo.findById(id).orElseThrow();
+    }
+    public List<LoanRequest>getAllRequests(){
+        return repo.findAll();
     }
 }
