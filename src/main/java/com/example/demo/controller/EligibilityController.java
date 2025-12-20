@@ -10,5 +10,10 @@ public class EligibilityController{
     @Autowired
     LoanEligibilityService service;
 
-    @Post
+    @PostMapping("/evaluate/{loanRequestId}")
+    public EligibilityResult evaluate(@PathVariable Long loanRequestId){
+        return service.evaluateEligibility(loanRequestID);
+    }
+    @GetMapping("/result/{loanRequestId}")
+    public EligibilityResult result(@PathVariable Long loanRequestId){}
 }
