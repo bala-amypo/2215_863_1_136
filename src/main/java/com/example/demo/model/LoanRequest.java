@@ -19,5 +19,7 @@ public class LoanRequest{
     private Double requestedAmount;
     private Integer tenureMonths;
     private String purpose;
-    private String status="PENDI"
+    private String status="PENDING";
+
+    private Timestamp appliedAt = new Timestamp(System.currentTimeMillis());
 }
