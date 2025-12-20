@@ -18,5 +18,6 @@ public class User{
     @column(unique = true)
     private String email;
     private String password;
-    private String role="CUSTOMER"
+    private String role="CUSTOMER";
+    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 }
