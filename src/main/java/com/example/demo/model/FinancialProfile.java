@@ -15,5 +15,12 @@ public class FinancialProfile {
     private Long id;
 
     @OneToOne
-    
+    private User user;
+    private Double monthyIncome;
+    private Double monthlyExpenses;
+    private Double existingLoanEmi;
+    private Integer creditScore;
+    private Double savingBalance;
+
+    private Timestamp lastUpdatedAt = new Timestamp(System.currentTimeMillis());
 }
