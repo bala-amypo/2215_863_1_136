@@ -15,6 +15,10 @@ public class UserServiceImpl implements UserService{
     }
 
     public User login(String email,String password){
-        User user=
+        User user=repo.findByEmail(email);
+        if(user !=null && user.getPassword().equals(password)){
+            return user;
+        }
+        throw new RuntimeException("Invalid credentials");
     }
 }
