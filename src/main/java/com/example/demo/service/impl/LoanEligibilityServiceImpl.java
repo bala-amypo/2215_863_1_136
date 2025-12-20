@@ -12,5 +12,10 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService{
     @Autowired EligibiltyResultRepository resultRepo;
     @Autowired RiskAssessmentLogRepository logpo;
 
-    public Eligibil
+    public EligibilityResult evaluateEligibility(Long loanRequestId){
+        LoanRequest request = loanRepo.findbyId(loanRequestId).orElseThrow();
+        FinancialProfile profile = profile.findById(request.getUser().getId());
+        double dti = profile.getExistingLoanEmi()/profile.getMonthlyIncome();
+        String risk = dti < 0.3 ? "LOW" : dti < 0.5
+    }
 }
