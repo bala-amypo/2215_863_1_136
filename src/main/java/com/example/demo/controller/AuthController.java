@@ -17,7 +17,8 @@ public class AuthController{
         return service.register(user);
     }
     @PostMapping("/login")
-    public User login(@RequestBody User user){
-        return service.login(user.getEmail(),user.getPassword());
+    public String login(@RequestBody User user){
+        User u=service.login(user.getEmail(),user.getPassword());
+        return jwtUtil.generateToken(u.getEmail());
     }
 }
