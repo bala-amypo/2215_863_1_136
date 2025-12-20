@@ -10,5 +10,13 @@ import java.util.List;
 @Service
 public class LoanRequestServiceImpl
 implements LoanRequestService{
-    
+    @Autowired
+    LoanRequestRepository repo;
+
+    public LoanRequest submitLoanRequest(LoanRequest request){
+        return repo.save(request);
+    }
+    public List<LoanRequest>getRequestByUser(Long ){
+        return repo.save
+    }
 }
