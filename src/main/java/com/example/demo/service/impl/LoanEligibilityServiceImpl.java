@@ -25,6 +25,16 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService{
 
         result.setMaxEligibleAmount(profile.getMonthyIncome() * 20);
         resultRepo.save(result);
-        RiskAssess
+        RiskAssessmentLog log = new RiskAssessmentLog();
+
+        log.setLoanRequestId(loanRequestId);
+        log.setDtiRatio(dti);
+        log.setCreditCheckStatus("DONE");
+        logRepo.save(log);
+
+        return result;
+    }
+    public EligibilityResult getResultByRequest(Long requestID){
+        return resultRepo.findByLoanRequestId(requestId);
     }
 }
