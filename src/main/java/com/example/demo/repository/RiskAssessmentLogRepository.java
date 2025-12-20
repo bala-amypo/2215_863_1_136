@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface
 RiskAssessmentLogRepository extends JpaRepository<RiskAssessmentLog,Long>{
-    List<RiskAssessmentLog>
-    find
+    List<RiskAssessmentLog>findByLoanRequestId(Long loanRequestId);
 }
