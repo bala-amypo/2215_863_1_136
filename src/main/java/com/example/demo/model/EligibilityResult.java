@@ -13,5 +13,14 @@ public class EligibilityResult{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    @OneT
+    @OneToOne
+    private LoanRequest loanRequest;
+
+    private Boolean isEligible;
+    private Double maxEligibleAmount;
+    private Double  estimatedEmi;
+    private String riskLevel;
+    private String rejectionReason;
+
+    private Timestamp calculatedAt = new Timestamp(System.currentTimeMillis());
 }
