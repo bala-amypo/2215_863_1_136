@@ -10,7 +10,7 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService{
     @Autowired LoanRequestRepository loanRepo;
     @Autowired FinancialProfileRepository profileRepo;
     @Autowired EligibiltyResultRepository resultRepo;
-    @Autowired RiskAssessmentLogRepository logpo;
+    @Autowired RiskAssessmentLogRepository logRepo;
 
     public EligibilityResult evaluateEligibility(Long loanRequestId){
         LoanRequest request = loanRepo.findbyId(loanRequestId).orElseThrow();
