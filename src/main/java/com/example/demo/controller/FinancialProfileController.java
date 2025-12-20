@@ -12,5 +12,11 @@ public class FinancialProfileController{
     FinancialProfileService service;
 
     @PostMapping
-    public FinancialProfile save
+    public FinancialProfile save(@RequestBody FinancialProfile profile){
+        return service.createOrUpdateProfile(profile);
+    }
+        @GetMapping("/user/{userId}")
+        public FinancialProfile get(@PathVariable Long userId){
+            return service.getProfileByUser(userId);
+    }
 }
