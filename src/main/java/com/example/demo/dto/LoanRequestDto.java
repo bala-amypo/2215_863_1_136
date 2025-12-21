@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-public class LoanRequest {
+public class LoanRequestDto {
 
     private Double amount;
     private Integer tenureMonths;
