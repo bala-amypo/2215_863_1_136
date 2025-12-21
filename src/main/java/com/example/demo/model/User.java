@@ -9,15 +9,20 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-public class User{
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fullName;
 
-    @column(unique = true)
+    @Column(unique = true)
     private String email;
+
     private String password;
-    private String role="CUSTOMER";
+
+    private String role = "CUSTOMER";
+
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 }
