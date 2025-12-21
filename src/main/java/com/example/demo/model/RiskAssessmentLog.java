@@ -1,14 +1,9 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.sql.Timestamp;
 
 @Entity
-@Getter
-@Setter
 public class RiskAssessmentLog {
 
     @Id
@@ -16,9 +11,49 @@ public class RiskAssessmentLog {
     private Long id;
 
     private String loanRequestId;
-
     private Double dtiRatio;
     private String creditCheckStatus;
 
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLoanRequestId() {
+        return loanRequestId;
+    }
+
+    public void setLoanRequestId(String loanRequestId) {
+        this.loanRequestId = loanRequestId;
+    }
+
+    public Double getDtiRatio() {
+        return dtiRatio;
+    }
+
+    public void setDtiRatio(Double dtiRatio) {
+        this.dtiRatio = dtiRatio;
+    }
+
+    public String getCreditCheckStatus() {
+        return creditCheckStatus;
+    }
+
+    public void setCreditCheckStatus(String creditCheckStatus) {
+        this.creditCheckStatus = creditCheckStatus;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
 }
