@@ -1,32 +1,36 @@
 package com.example.demo.controller;
+
 import com.example.demo.model.LoanRequest;
 import com.example.demo.service.LoanRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/loan-requests")
-public class LoanRequestController{
+public class LoanRequestController {
+
     @Autowired
     LoanRequestService service;
 
     @PostMapping
-    public LoanRequest submit(@RequestBody LoanRequest request){
+    public LoanRequest submit(@RequestBody LoanRequest request) {
         return service.submitLoanRequest(request);
     }
 
     @GetMapping("/user/{userId}")
-    public List<LoanRequest> getByUser(@PathVariable Long userId){
-        return service.getRequestByUser(userId);
+    public List<LoanRequest> getByUser(@PathVariable Long userId) {
+        return service.getRequestsByUser(userId);
     }
 
     @GetMapping("/{id}")
-    public LoanRequest getById(@PathVariable Long id){
+    public LoanRequest getById(@PathVariable Long id) {
         return service.getRequestById(id);
     }
+
     @GetMapping
-    public List<LoanRequest>getAll(){
+    public List<LoanRequest> getAll() {
         return service.getAllRequests();
     }
 }
