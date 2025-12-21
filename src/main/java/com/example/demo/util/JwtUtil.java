@@ -1,41 +1,28 @@
 package com.example.demo.util;
 
 import io.jsonwebtoken.*;
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-@Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "secret123";
+    private final String secret;
+    private final long validityInMs;
 
-    public String extractUsername(String token) {
-        return getClaims(token).getSubject();
+    public JwtUtil(String secret, long validityInMs) {
+        this.secret = secret;
+        this.validityInMs = validityInMs;
     }
 
-    public boolean validateToken(String token) {
-        try {
-            getClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public String generateToken(String email) {
+    public String generateToken(String subject) {
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+            .setSubject(subject)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + validityInMs))
+            .signWith(SignatureAlgorithm.HS256, secret)
+            .compact();
+    }
+
+    public String validateToken(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 }
