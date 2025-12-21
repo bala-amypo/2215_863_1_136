@@ -9,12 +9,13 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-public class RiskAssessmentLog{
+public class RiskAssessmentLog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long loanRequestedId;
+    private Long loanRequestId;
     private Double dtiRatio;
     private String creditCheckStatus;
 

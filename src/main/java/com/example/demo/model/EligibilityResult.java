@@ -4,21 +4,23 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.swl.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
-public class EligibilityResult{
+public class EligibilityResult {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     private LoanRequest loanRequest;
 
     private Boolean isEligible;
     private Double maxEligibleAmount;
-    private Double  estimatedEmi;
+    private Double estimatedEmi;
     private String riskLevel;
     private String rejectionReason;
 

@@ -10,17 +10,19 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class FinancialProfile {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     private User user;
-    private Double monthyIncome;
+
+    private Double monthlyIncome;
     private Double monthlyExpenses;
     private Double existingLoanEmi;
     private Integer creditScore;
-    private Double savingBalance;
+    private Double savingsBalance;
 
     private Timestamp lastUpdatedAt = new Timestamp(System.currentTimeMillis());
 }
