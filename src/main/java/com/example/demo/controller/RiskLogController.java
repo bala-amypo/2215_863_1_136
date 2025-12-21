@@ -8,6 +8,6 @@ public class RiskLogController {
 
     @GetMapping("/{loanRequestId}")
     public String getLogs(@PathVariable Long loanRequestId) {
-        return "Get risk logs for " + loanRequestId;
+        return "Get risk logs for loan " + loanRequestId;
     }
 }
