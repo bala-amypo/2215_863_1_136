@@ -9,37 +9,39 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoanEligibilityServiceImpl implements LoanEligibilityService {
 
-    @Autowired LoanRequestRepository loanRepo;
-    @Autowired FinancialProfileRepository profileRepo;
-    @Autowired EligibilityResultRepository resultRepo;
-    @Autowired RiskAssessmentLogRepository logRepo;
+@Autowired LoanRequestRepository loanRepo;
+@Autowired FinancialProfileRepository profileRepo;
+@Autowired EligibilityResultRepository resultRepo;
+@Autowired RiskAssessmentLogRepository logRepo;
 
-    public EligibilityResult evaluateEligibility(Long loanRequestId) {
+@Override
+public EligibilityResult evaluateEligibility(Long loanRequestId) {
 
-        LoanRequest request = loanRepo.findById(loanRequestId).orElseThrow();
-        FinancialProfile profile = profileRepo.findByUserId(request.getUser().getUsername());
+LoanRequest request = loanRepo.findById(loanRequestId).orElseThrow();
+FinancialProfile profile = profileRepo.findByUserUsername(request.getUser().getUsername());
 
-        double dti = profile.getExistingLoanEmi() / profile.getMonthlyIncome();
-        String risk = dti < 0.3 ? "LOW" : dti < 0.5 ? "MEDIUM" : "HIGH";
+double dti = profile.getExistingLoanEmi() / profile.getMonthlyIncome();
+String risk = dti < 0.3 ? "LOW" : dti < 0.5 ? "MEDIUM" : "HIGH";
 
-        EligibilityResult result = new EligibilityResult();
-        result.setLoanRequest(request);
-        result.setIsEligible(profile.getCreditScore() >= 650 && dti < 0.5);
-        result.setRiskLevel(risk);
-        result.setMaxEligibleAmount(profile.getMonthlyIncome() * 20);
+EligibilityResult result = new EligibilityResult();
+result.setLoanRequest(request);
+result.setIsEligible(profile.getCreditScore() >= 650 && dti < 0.5);
+result.setRiskLevel(risk);
+result.setMaxEligibleAmount(profile.getMonthlyIncome() * 20);
 
-        resultRepo.save(result);
+resultRepo.save(result);
 
-        RiskAssessmentLog log = new RiskAssessmentLog();
-        log.setLoanRequestId(loanRequestId);
-        log.setDtiRatio(dti);
-        log.setCreditCheckStatus("DONE");
-        logRepo.save(log);
+RiskAssessmentLog log = new RiskAssessmentLog();
+log.setLoanRequestId(loanRequestId);
+log.setDtiRatio(dti);
+log.setCreditCheckStatus("DONE");
+logRepo.save(log);
 
-        return result;
-    }
+return result;
+}
 
-    public EligibilityResult getResultByRequest(Long requestId) {
-        return resultRepo.findByLoanRequestId(requestId);
-    }
+@Override
+public EligibilityResult getResultByRequest(Long requestId) {
+return resultRepo.findByLoanRequestId(requestId);
+}
 }
