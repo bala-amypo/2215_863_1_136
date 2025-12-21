@@ -15,7 +15,8 @@ public class RiskAssessmentLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long loanRequestId;
+    private String loanRequestId;
+
     private Double dtiRatio;
     private String creditCheckStatus;
 
