@@ -14,6 +14,6 @@ public class FinancialProfileServiceImpl implements FinancialProfileService{
         return repo.save(profile);
     }
     public FinancialProfile getProfileByUser(Long userId){
-        reuturn repo.findByUserId(userId);
+        return repo.findByUserId(userId);
     }
 }
