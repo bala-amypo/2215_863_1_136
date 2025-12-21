@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 @Entity
 public class LoanRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,25 +19,75 @@ public class LoanRequest {
     private String status;
     private Timestamp appliedAt;
 
+    // Default constructor
+    public LoanRequest() {
+    }
+
+    // Parameterized constructor
+    public LoanRequest(Long id, User user, Double requestedAmount, Integer tenureMonths, String purpose, String status, Timestamp appliedAt) {
+        this.id = id;
+        this.user = user;
+        this.requestedAmount = requestedAmount;
+        this.tenureMonths = tenureMonths;
+        this.purpose = purpose;
+        this.status = status;
+        this.appliedAt = appliedAt;
+    }
+
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Double getRequestedAmount() { return requestedAmount; }
-    public void setRequestedAmount(Double requestedAmount) { this.requestedAmount = requestedAmount; }
+    public User getUser() {
+        return user;
+    }
 
-    public Integer getTenureMonths() { return tenureMonths; }
-    public void setTenureMonths(Integer tenureMonths) { this.tenureMonths = tenureMonths; }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public String getPurpose() { return purpose; }
-    public void setPurpose(String purpose) { this.purpose = purpose; }
+    public Double getRequestedAmount() {
+        return requestedAmount;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setRequestedAmount(Double requestedAmount) {
+        this.requestedAmount = requestedAmount;
+    }
 
-    public Timestamp getAppliedAt() { return appliedAt; }
-    public void setAppliedAt(Timestamp appliedAt) { this.appliedAt = appliedAt; }
+    public Integer getTenureMonths() {
+        return tenureMonths;
+    }
+
+    public void setTenureMonths(Integer tenureMonths) {
+        this.tenureMonths = tenureMonths;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Timestamp getAppliedAt() {
+        return appliedAt;
+    }
+
+    public void setAppliedAt(Timestamp appliedAt) {
+        this.appliedAt = appliedAt;
+    }
 }
