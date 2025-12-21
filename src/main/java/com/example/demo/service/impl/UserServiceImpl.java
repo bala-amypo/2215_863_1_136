@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +11,18 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository repo;
+    private UserRepository userRepository;
 
-    public User register(User user) {
-        return repo.save(user);
+    @Override
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
-    public User login(String email, String password) {
-        User user = repo.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+    @Override
+    public void validateUser(User user) {
+        User dbUser = userRepository.findByUsername(user.getUsername());
+        if (dbUser == null || !dbUser.getPassword().equals(user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
         }
-        throw new RuntimeException("Invalid credentials");
     }
 }

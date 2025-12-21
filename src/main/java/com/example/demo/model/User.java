@@ -1,28 +1,28 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.sql.Timestamp;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
-@Getter
-@Setter
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String fullName;
-
-    @Column(unique = true)
-    private String email;
-
+    private String username;
     private String password;
 
-    private String role = "CUSTOMER";
+    public String getUsername() {
+        return username;
+    }
 
-    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
