@@ -17,7 +17,7 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService {
     public EligibilityResult evaluateEligibility(Long loanRequestId) {
 
         LoanRequest request = loanRepo.findById(loanRequestId).orElseThrow();
-        FinancialProfile profile = profileRepo.findByUserId(request.getUser().getId());
+        FinancialProfile profile = profileRepo.findByUserId(request.getUser().getUsername());
 
         double dti = profile.getExistingLoanEmi() / profile.getMonthlyIncome();
         String risk = dti < 0.3 ? "LOW" : dti < 0.5 ? "MEDIUM" : "HIGH";
