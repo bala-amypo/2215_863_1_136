@@ -21,26 +21,38 @@ public class LoanRequestController {
         this.userRepository = userRepository;
     }
 
-    // ✅ POST – submit loan request
+    // ✅ POST – Submit loan request
     @PostMapping
     public LoanRequest submitRequest(@RequestBody LoanRequest loanRequest) {
+
+        // 🔴 IMPORTANT: load managed User entity
+        if (loanRequest.getUser() != null && loanRequest.getUser().getId() != null) {
+            User user = userRepository
+                    .findById(loanRequest.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            loanRequest.setUser(user);
+        }
+
         return loanRequestService.submitRequest(loanRequest);
     }
 
-    // ✅ GET – get all loan requests
+    // ✅ GET – Get all loan requests
     @GetMapping
     public List<LoanRequest> getAllRequests() {
         return loanRequestService.getAllRequests();
     }
 
-    // ✅ GET – get loan requests by user
+    // ✅ GET – Get loan requests by user ID
     @GetMapping("/user/{userId}")
     public List<LoanRequest> getRequestsByUser(@PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         return loanRequestService.getRequestsByUser(user);
     }
 
-    // ✅ GET – get loan request by ID
+    // ✅ GET – Get loan request by ID
     @GetMapping("/{id}")
     public LoanRequest getRequestById(@PathVariable Long id) {
         return loanRequestService.getRequestById(id);
