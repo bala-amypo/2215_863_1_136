@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.LoanRequest;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.LoanRequestService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,32 +13,36 @@ import java.util.List;
 public class LoanRequestController {
 
     private final LoanRequestService loanRequestService;
+    private final UserRepository userRepository;
 
-    public LoanRequestController(LoanRequestService loanRequestService) {
+    public LoanRequestController(LoanRequestService loanRequestService,
+                                 UserRepository userRepository) {
         this.loanRequestService = loanRequestService;
+        this.userRepository = userRepository;
     }
 
-    // ✅ Submit loan request (POST shows body in Swagger)
+    // ✅ POST – submit loan request
     @PostMapping
-    public LoanRequest submitRequest(@RequestBody LoanRequest request) {
-        return loanRequestService.saveLoanRequest(request);
+    public LoanRequest submitRequest(@RequestBody LoanRequest loanRequest) {
+        return loanRequestService.submitRequest(loanRequest);
     }
 
-    // ✅ Get all loan requests (THIS FIXES YOUR ISSUE)
+    // ✅ GET – get all loan requests
     @GetMapping
     public List<LoanRequest> getAllRequests() {
-        return loanRequestService.getAllLoanRequests();
+        return loanRequestService.getAllRequests();
     }
 
-    // ✅ Get loan requests by user
+    // ✅ GET – get loan requests by user
     @GetMapping("/user/{userId}")
-    public List<LoanRequest> getUserRequests(@PathVariable Long userId) {
-        return loanRequestService.getLoanRequestsByUser(userId);
+    public List<LoanRequest> getRequestsByUser(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return loanRequestService.getRequestsByUser(user);
     }
 
-    // ✅ Get loan request by ID
+    // ✅ GET – get loan request by ID
     @GetMapping("/{id}")
     public LoanRequest getRequestById(@PathVariable Long id) {
-        return loanRequestService.getLoanRequestById(id);
+        return loanRequestService.getRequestById(id);
     }
 }
