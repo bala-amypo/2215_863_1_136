@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;   // ✅ ADDED
 import com.example.demo.model.LoanRequest;
 import com.example.demo.model.User;
 import com.example.demo.repository.LoanRequestRepository;
@@ -29,7 +30,7 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
             User user = userRepository
                     .findById(loanRequest.getUser().getId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             loanRequest.setUser(user);
         }
@@ -47,7 +48,9 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public LoanRequest getRequestById(Long id) {
-        return loanRequestRepository.findById(id).orElse(null);
+        return loanRequestRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("LoanRequest not found with id " + id));
     }
 
     @Override

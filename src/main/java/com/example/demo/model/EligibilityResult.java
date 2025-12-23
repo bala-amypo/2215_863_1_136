@@ -3,7 +3,6 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Schema(description = "Eligibility Result model")
@@ -13,8 +12,7 @@ public class EligibilityResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "loan_request_id", nullable = false)
+    @OneToOne
     private LoanRequest loanRequest;
 
     private Boolean isEligible;
@@ -22,11 +20,28 @@ public class EligibilityResult {
     private Double estimatedEmi;
     private String riskLevel;
     private String rejectionReason;
-
-    @CreationTimestamp
     private Timestamp calculatedAt;
 
     public EligibilityResult() {}
+    public EligibilityResult(Long id, LoanRequest loanRequest, Boolean isEligible, Double maxEligibleAmount, Double estimatedEmi, String riskLevel, String rejectionReason, Timestamp calculatedAt) {
+        this.id = id; this.loanRequest = loanRequest; this.isEligible = isEligible; this.maxEligibleAmount = maxEligibleAmount; this.estimatedEmi = estimatedEmi; this.riskLevel = riskLevel; this.rejectionReason = rejectionReason; this.calculatedAt = calculatedAt;
+    }
 
-    // getters & setters (same as yours)
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public LoanRequest getLoanRequest() { return loanRequest; }
+    public void setLoanRequest(LoanRequest loanRequest) { this.loanRequest = loanRequest; }
+    public Boolean getIsEligible() { return isEligible; }
+    public void setIsEligible(Boolean isEligible) { this.isEligible = isEligible; }
+    public Double getMaxEligibleAmount() { return maxEligibleAmount; }
+    public void setMaxEligibleAmount(Double maxEligibleAmount) { this.maxEligibleAmount = maxEligibleAmount; }
+    public Double getEstimatedEmi() { return estimatedEmi; }
+    public void setEstimatedEmi(Double estimatedEmi) { this.estimatedEmi = estimatedEmi; }
+    public String getRiskLevel() { return riskLevel; }
+    public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevel; }
+    public String getRejectionReason() { return rejectionReason; }
+    public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
+    public Timestamp getCalculatedAt() { return calculatedAt; }
+    public void setCalculatedAt(Timestamp calculatedAt) { this.calculatedAt = calculatedAt; }
 }
