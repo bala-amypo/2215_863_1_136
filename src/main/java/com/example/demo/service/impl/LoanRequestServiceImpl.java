@@ -26,11 +26,12 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public LoanRequest createLoan(LoanRequest loanRequest) {
-
+        if (loanRequest == null) {
+            throw new BadRequestException("Loan request cannot be null");
+        }
         if (loanRequest.getAmount() <= 0) {
             throw new BadRequestException("Loan amount must be greater than zero");
         }
-
         return loanRequestRepository.save(loanRequest);
     }
 }

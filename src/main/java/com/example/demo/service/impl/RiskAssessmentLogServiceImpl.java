@@ -1,27 +1,25 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.RiskAssessmentLog;
-import com.example.demo.repository.RiskAssessmentLogRepository;
-import com.example.demo.service.RiskAssessmentLogService;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.RiskAssessment;
+import com.example.demo.repository.RiskAssessmentRepository;
+import com.example.demo.service.RiskAssessmentLogicService;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
-public class RiskAssessmentLogServiceImpl implements RiskAssessmentLogService {
+public class RiskAssessmentLogicServiceImpl implements RiskAssessmentLogicService {
 
-    private final RiskAssessmentLogRepository repository;
+    private final RiskAssessmentRepository repository;
 
-    public RiskAssessmentLogServiceImpl(RiskAssessmentLogRepository repository) {
+    public RiskAssessmentLogicServiceImpl(RiskAssessmentRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public void logRisk(RiskAssessmentLog log) {
-        repository.save(log);
-    }
-
-    @Override
-    public List<RiskAssessmentLog> getLogsForLoan(Long loanRequestId) {
-        return repository.findByLoanRequestId(loanRequestId);
+    public RiskAssessment assessRisk(Long userId) {
+        return repository.findByUserId(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Risk assessment data not found for user id: " + userId)
+                );
     }
 }
