@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.LoanRequest;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -25,13 +26,19 @@ public class LoanRequestController {
     @PostMapping
     public LoanRequest submitRequest(@RequestBody LoanRequest loanRequest) {
 
-        // 🔴 IMPORTANT: load managed User entity
-        if (loanRequest.getUser() != null && loanRequest.getUser().getId() != null) {
-            User user = userRepository
-                    .findById(loanRequest.getUser().getId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            loanRequest.setUser(user);
+        if (loanRequest.getUser() == null || loanRequest.getUser().getId() == null) {
+            throw new ResourceNotFoundException("User ID must be provided");
         }
+
+        // Load managed User entity from DB
+        User user = userRepository.findById(loanRequest.getUser().getId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with id: " + loanRequest.getUser().getId()
+                        )
+                );
+
+        loanRequest.setUser(user);
 
         return loanRequestService.submitRequest(loanRequest);
     }
@@ -45,9 +52,11 @@ public class LoanRequestController {
     // ✅ GET – Get loan requests by user ID
     @GetMapping("/user/{userId}")
     public List<LoanRequest> getRequestsByUser(@PathVariable Long userId) {
-        User user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with id: " + userId)
+                );
 
         return loanRequestService.getRequestsByUser(user);
     }
