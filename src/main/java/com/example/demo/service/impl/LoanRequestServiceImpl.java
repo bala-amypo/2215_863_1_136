@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;   // ✅ ADDED
 import com.example.demo.model.LoanRequest;
 import com.example.demo.model.User;
 import com.example.demo.repository.LoanRequestRepository;
@@ -9,6 +8,7 @@ import com.example.demo.service.LoanRequestService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LoanRequestServiceImpl implements LoanRequestService {
@@ -25,14 +25,17 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     @Override
     public LoanRequest submitRequest(LoanRequest loanRequest) {
 
-        // 🔴 CRITICAL FIX: attach managed User
+        // Attach managed User if present
         if (loanRequest.getUser() != null && loanRequest.getUser().getId() != null) {
 
-            User user = userRepository
-                    .findById(loanRequest.getUser().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            Optional<User> userOpt = userRepository.findById(loanRequest.getUser().getId());
 
-            loanRequest.setUser(user);
+            if (userOpt.isPresent()) {
+                loanRequest.setUser(userOpt.get());
+            } else {
+                // Handle user not found: ignore or return null
+                return null; // You can choose to return null or throw some other custom handling
+            }
         }
 
         return loanRequestRepository.save(loanRequest);
@@ -48,9 +51,8 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public LoanRequest getRequestById(Long id) {
-        return loanRequestRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("LoanRequest not found with id " + id));
+        // Return null if not found
+        return loanRequestRepository.findById(id).orElse(null);
     }
 
     @Override
