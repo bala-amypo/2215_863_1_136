@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import  com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
@@ -13,6 +14,7 @@ public class FinancialProfile {
     private Long id;
 
     @OneToOne
+    @JsonIgnore
     private User user;
 
     private Double monthlyIncome;
