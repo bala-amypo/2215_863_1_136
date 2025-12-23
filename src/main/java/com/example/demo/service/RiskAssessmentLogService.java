@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.model.RiskAssessmentLog;
-import java.util.List;
+import com.example.demo.model.RiskAssessment;
+import com.example.demo.model.LoanRequest;
 
 public interface RiskAssessmentLogService {
-    void logRisk(RiskAssessmentLog log);
-    List<RiskAssessmentLog> getLogsForLoan(Long loanRequestId);
+
+    RiskAssessment assessRisk(LoanRequest loanRequest);
+
+    RiskAssessment getRiskByLoan(LoanRequest loanRequest);
 }
