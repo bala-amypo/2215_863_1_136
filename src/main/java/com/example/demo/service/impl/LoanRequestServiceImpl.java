@@ -7,6 +7,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.LoanRequestService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,15 +28,25 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
         // Attach managed User if present
         if (loanRequest.getUser() != null && loanRequest.getUser().getId() != null) {
-
             Optional<User> userOpt = userRepository.findById(loanRequest.getUser().getId());
-
             if (userOpt.isPresent()) {
                 loanRequest.setUser(userOpt.get());
             } else {
-                // Handle user not found: ignore or return null
-                return null; // You can choose to return null or throw some other custom handling
+                // User not found
+                throw new IllegalArgumentException("User with ID " + loanRequest.getUser().getId() + " not found");
             }
+        } else {
+            throw new IllegalArgumentException("LoanRequest must have a valid user");
+        }
+
+        // Set appliedAt if not already set
+        if (loanRequest.getAppliedAt() == null) {
+            loanRequest.setAppliedAt(new Timestamp(System.currentTimeMillis()));
+        }
+
+        // Set default status if null or empty
+        if (loanRequest.getStatus() == null || loanRequest.getStatus().isEmpty()) {
+            loanRequest.setStatus("PENDING");
         }
 
         return loanRequestRepository.save(loanRequest);
@@ -43,15 +54,14 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public List<LoanRequest> getRequestsByUser(User user) {
-        if (user == null) {
-            return List.of();
+        if (user == null || user.getId() == null) {
+            return List.of(); // return empty list if user is invalid
         }
         return loanRequestRepository.findByUser(user);
     }
 
     @Override
     public LoanRequest getRequestById(Long id) {
-        // Return null if not found
         return loanRequestRepository.findById(id).orElse(null);
     }
 
