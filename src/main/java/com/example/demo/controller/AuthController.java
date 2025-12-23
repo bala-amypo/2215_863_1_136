@@ -5,7 +5,7 @@ import com.example.demo.dto.RegisterRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @PostMapping("/register")
