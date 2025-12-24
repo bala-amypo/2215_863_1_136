@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,15 +22,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(User user) {
 
-        // ✅ 1. Check duplicate email (prevents DB crash → 500)
-        if (repository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already registered");
+        // 🔒 1. Validate email
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new BadRequestException("Email is required");
         }
 
-        // ✅ 2. Encrypt password (MANDATORY)
+        // 🔒 2. Validate password
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new BadRequestException("Password is required");
+        }
+
+        // 🔒 3. Check duplicate email (PREVENTS DB 500 ERROR)
+        if (repository.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email already registered");
+        }
+
+        // 🔒 4. Encrypt password (MANDATORY)
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // ✅ 3. Save user
+        // 🔒 5. Save user
         return repository.save(user);
     }
 
