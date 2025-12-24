@@ -16,6 +16,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
+
+        // 🔒 Enforce server-side control
+        user.setId(null);                 // prevent manual ID injection
+        user.setRole("CUSTOMER");         // enforce default role
+
         return service.registerUser(user);
     }
 }
