@@ -18,8 +18,17 @@ import java.util.Collections;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    // SAME secret key used while generating token
     private static final String SECRET_KEY = "mySecretKey12345";
+
+    // 🚨 VERY IMPORTANT: Skip Swagger & auth endpoints
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+
+        return path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs")
+                || path.startsWith("/auth");
+    }
 
     @Override
     protected void doFilterInternal(
