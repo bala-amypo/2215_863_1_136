@@ -1,10 +1,28 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import java.sql.Timestamp;
+
 @Entity
 public class RiskAssessmentLog {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long loanRequestId;
     private Double dtiRatio;
     private String creditCheckStatus;
+
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+    public RiskAssessmentLog() {}
+
+    public RiskAssessmentLog(Long loanRequestId, Double dtiRatio, String creditCheckStatus) {
+        this.loanRequestId = loanRequestId;
+        this.dtiRatio = dtiRatio;
+        this.creditCheckStatus = creditCheckStatus;
+    }
+
+    public Long getId() { return id; }
 }

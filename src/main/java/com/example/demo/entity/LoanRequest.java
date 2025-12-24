@@ -1,6 +1,13 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import java.sql.Timestamp;
+
 @Entity
 public class LoanRequest {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -10,5 +17,23 @@ public class LoanRequest {
     private Integer tenureMonths;
     private String purpose;
     private String status = "PENDING";
+
     private Timestamp appliedAt = new Timestamp(System.currentTimeMillis());
+
+    public Long getId() { return id; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    public Double getRequestedAmount() { return requestedAmount; }
+    public void setRequestedAmount(Double requestedAmount) { this.requestedAmount = requestedAmount; }
+
+    public Integer getTenureMonths() { return tenureMonths; }
+    public void setTenureMonths(Integer tenureMonths) { this.tenureMonths = tenureMonths; }
+
+    public String getPurpose() { return purpose; }
+    public void setPurpose(String purpose) { this.purpose = purpose; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
