@@ -3,40 +3,86 @@ package com.example.demo.dto;
 public class LoanDtos {
 
     public static class LoanRequestDto {
+
         private Double requestedAmount;
         private Integer tenureMonths;
         private String purpose;
 
-        public Double getRequestedAmount() { return requestedAmount; }
-        public void setRequestedAmount(Double requestedAmount) { this.requestedAmount = requestedAmount; }
+        public LoanRequestDto() {}
 
-        public Integer getTenureMonths() { return tenureMonths; }
-        public void setTenureMonths(Integer tenureMonths) { this.tenureMonths = tenureMonths; }
+        public Double getRequestedAmount() {
+            return requestedAmount;
+        }
 
-        public String getPurpose() { return purpose; }
-        public void setPurpose(String purpose) { this.purpose = purpose; }
+        public void setRequestedAmount(Double requestedAmount) {
+            this.requestedAmount = requestedAmount;
+        }
+
+        public Integer getTenureMonths() {
+            return tenureMonths;
+        }
+
+        public void setTenureMonths(Integer tenureMonths) {
+            this.tenureMonths = tenureMonths;
+        }
+
+        public String getPurpose() {
+            return purpose;
+        }
+
+        public void setPurpose(String purpose) {
+            this.purpose = purpose;
+        }
     }
 
     public static class FinancialProfileDto {
+
         private Double monthlyIncome;
         private Double monthlyExpenses;
         private Double existingLoanEmi;
         private Integer creditScore;
         private Double savingsBalance;
 
-        public Double getMonthlyIncome() { return monthlyIncome; }
-        public void setMonthlyIncome(Double monthlyIncome) { this.monthlyIncome = monthlyIncome; }
+        public FinancialProfileDto() {}
 
-        public Double getMonthlyExpenses() { return monthlyExpenses; }
-        public void setMonthlyExpenses(Double monthlyExpenses) { this.monthlyExpenses = monthlyExpenses; }
+        public Double getMonthlyIncome() {
+            return monthlyIncome;
+        }
 
-        public Double getExistingLoanEmi() { return existingLoanEmi; }
-        public void setExistingLoanEmi(Double existingLoanEmi) { this.existingLoanEmi = existingLoanEmi; }
+        public void setMonthlyIncome(Double monthlyIncome) {
+            this.monthlyIncome = monthlyIncome;
+        }
 
-        public Integer getCreditScore() { return creditScore; }
-        public void setCreditScore(Integer creditScore) { this.creditScore = creditScore; }
+        public Double getMonthlyExpenses() {
+            return monthlyExpenses;
+        }
 
-        public Double getSavingsBalance() { return savingsBalance; }
-        public void setSavingsBalance(Double savingsBalance) { this.savingsBalance = savingsBalance; }
+        public void setMonthlyExpenses(Double monthlyExpenses) {
+            this.monthlyExpenses = monthlyExpenses;
+        }
+
+        public Double getExistingLoanEmi() {
+            return existingLoanEmi;
+        }
+
+        public void setExistingLoanEmi(Double existingLoanEmi) {
+            this.existingLoanEmi = existingLoanEmi;
+        }
+
+        public Integer getCreditScore() {
+            return creditScore;
+        }
+
+        public void setCreditScore(Integer creditScore) {
+            this.creditScore = creditScore;
+        }
+
+        public Double getSavingsBalance() {
+            return savingsBalance;
+        }
+
+        public void setSavingsBalance(Double savingsBalance) {
+            this.savingsBalance = savingsBalance;
+        }
     }
 }
