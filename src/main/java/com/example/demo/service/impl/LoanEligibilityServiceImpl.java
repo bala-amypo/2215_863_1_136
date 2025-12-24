@@ -1,42 +1,57 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.EligibilityResult;
+import com.example.demo.entity.FinancialProfile;
+import com.example.demo.entity.LoanRequest;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.EligibilityResultRepository;
+import com.example.demo.repository.FinancialProfileRepository;
+import com.example.demo.repository.LoanRequestRepository;
+import com.example.demo.service.LoanEligibilityService;
+import org.springframework.stereotype.Service;
+
 @Service
 public class LoanEligibilityServiceImpl implements LoanEligibilityService {
 
-    private final LoanRequestRepository loanRepo;
-    private final FinancialProfileRepository profileRepo;
-    private final EligibilityResultRepository resultRepo;
+    private final LoanRequestRepository loanRequestRepository;
+    private final FinancialProfileRepository financialProfileRepository;
+    private final EligibilityResultRepository eligibilityResultRepository;
 
     public LoanEligibilityServiceImpl(
-        LoanRequestRepository loanRepo,
-        FinancialProfileRepository profileRepo,
-        EligibilityResultRepository resultRepo) {
+            LoanRequestRepository loanRequestRepository,
+            FinancialProfileRepository financialProfileRepository,
+            EligibilityResultRepository eligibilityResultRepository) {
 
-        this.loanRepo = loanRepo;
-        this.profileRepo = profileRepo;
-        this.resultRepo = resultRepo;
+        this.loanRequestRepository = loanRequestRepository;
+        this.financialProfileRepository = financialProfileRepository;
+        this.eligibilityResultRepository = eligibilityResultRepository;
     }
 
+    @Override
     public EligibilityResult evaluateEligibility(Long loanRequestId) {
 
-        LoanRequest req = loanRepo.findById(loanRequestId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        FinancialProfile profile = profileRepo.findByUserId(req.getUser().getId())
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        FinancialProfile profile = financialProfileRepository
+                .findByUserId(loanRequest.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         double dti = (profile.getMonthlyExpenses() + profile.getExistingLoanEmi())
                 / profile.getMonthlyIncome();
 
         EligibilityResult result = new EligibilityResult();
-        result.setLoanRequest(req);
+        result.setLoanRequest(loanRequest);
         result.setIsEligible(dti < 0.6 && profile.getCreditScore() >= 600);
         result.setRiskLevel(dti > 0.5 ? "HIGH" : "LOW");
         result.setMaxEligibleAmount(profile.getMonthlyIncome() * 10);
 
-        return resultRepo.save(result);
+        return eligibilityResultRepository.save(result);
     }
 
+    @Override
     public EligibilityResult getResultByRequest(Long requestId) {
-        return resultRepo.findByLoanRequestId(requestId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return eligibilityResultRepository.findByLoanRequestId(requestId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
