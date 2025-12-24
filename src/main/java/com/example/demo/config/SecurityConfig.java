@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.security.JwtFilter;
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,12 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
+
+                // ✅ Allow internal forwards & errors
+                .dispatcherTypeMatchers(
+                    DispatcherType.ERROR,
+                    DispatcherType.FORWARD
+                ).permitAll()
 
                 // ✅ Swagger URLs
                 .requestMatchers(
