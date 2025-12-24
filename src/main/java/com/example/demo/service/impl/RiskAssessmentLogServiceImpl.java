@@ -10,19 +10,14 @@ import java.util.List;
 @Service
 public class RiskAssessmentLogServiceImpl implements RiskAssessmentLogService {
 
-    private final RiskAssessmentLogRepository riskAssessmentLogRepository;
+    private final RiskAssessmentLogRepository repository;
 
-    public RiskAssessmentLogServiceImpl(RiskAssessmentLogRepository riskAssessmentLogRepository) {
-        this.riskAssessmentLogRepository = riskAssessmentLogRepository;
-    }
-
-    @Override
-    public void logAssessment(RiskAssessmentLog log) {
-        riskAssessmentLogRepository.save(log);
+    public RiskAssessmentLogServiceImpl(RiskAssessmentLogRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public List<RiskAssessmentLog> getLogsByRequest(Long requestId) {
-        return riskAssessmentLogRepository.findByLoanRequestId(requestId);
+        return repository.findByLoanRequestId(requestId);
     }
 }
