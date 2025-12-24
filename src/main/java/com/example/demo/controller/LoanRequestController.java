@@ -16,6 +16,10 @@ public class LoanRequestController {
 
     @PostMapping
     public LoanRequest submit(@RequestBody LoanRequest request) {
+
+        // 🔒 Prevent client from injecting ID
+        request.setId(null);
+
         return service.submitLoanRequest(request);
     }
 

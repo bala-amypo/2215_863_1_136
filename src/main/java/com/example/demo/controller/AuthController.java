@@ -18,8 +18,9 @@ public class AuthController {
     public User register(@RequestBody User user) {
 
         // 🔒 Enforce server-side control
-        user.setId(null);                 // prevent manual ID injection
-        user.setRole("CUSTOMER");         // enforce default role
+        user.setId(null);          // prevent manual ID injection
+        user.setRole("CUSTOMER");  // enforce default role
+        user.setCreatedAt(null);   // prevent client timestamp injection
 
         return service.registerUser(user);
     }

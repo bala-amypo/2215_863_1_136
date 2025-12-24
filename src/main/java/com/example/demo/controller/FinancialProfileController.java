@@ -16,6 +16,10 @@ public class FinancialProfileController {
 
     @PostMapping
     public FinancialProfile save(@RequestBody FinancialProfile profile) {
+
+        // 🔒 Prevent client from injecting ID
+        profile.setId(null);
+
         return service.createOrUpdateProfile(profile);
     }
 
