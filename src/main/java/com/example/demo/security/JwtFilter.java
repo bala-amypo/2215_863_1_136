@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,15 +13,21 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static final String SECRET_KEY = "mySecretKey12345";
+    // ✅ Strong enough for HMAC-SHA
+    private static final String SECRET_KEY = "mySecretKey12345mySecretKey12345";
 
-    // 🚨 VERY IMPORTANT: Skip Swagger & auth endpoints
+    private static final SecretKey KEY =
+            Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+
+    // ✅ Skip auth & swagger endpoints
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
@@ -45,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             try {
                 Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(SECRET_KEY.getBytes())
+                        .setSigningKey(KEY)
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
@@ -60,13 +67,15 @@ public class JwtFilter extends OncePerRequestFilter {
                         );
 
                 authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
+                        new WebAuthenticationDetailsSource()
+                                .buildDetails(request)
                 );
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);
 
             } catch (Exception e) {
+                // Invalid token → clear context but do NOT crash
                 SecurityContextHolder.clearContext();
             }
         }
