@@ -32,7 +32,7 @@ public class SecurityConfig {
             // Disable CSRF
             .csrf(csrf -> csrf.disable())
 
-            // Enable CORS using our custom configuration
+            // Enable CORS using custom configuration
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
             // Stateless session management
@@ -62,22 +62,25 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            // Add JWT filter before UsernamePasswordAuthenticationFilter
+            // Add JWT filter
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // Define CORS configuration source
+    // CORS configuration source for Swagger and other front-end requests
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));    // Allow all origins (change for production)
-        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS")); // Allowed HTTP methods
-        configuration.setAllowedHeaders(List.of("*"));    // Allow all headers
-        configuration.setAllowCredentials(true);         // Allow credentials
+
+        // Allow Swagger UI or any front-end origin
+        configuration.setAllowedOrigins(List.of("*")); // Use specific URL in production
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Apply CORS config to all endpoints
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
