@@ -22,11 +22,17 @@ public class LoanRequestServiceImpl implements LoanRequestService {
         return repository.save(request);
     }
 
+    // ✅ REQUIRED BY TESTS (alias)
+    public LoanRequest submitRequest(LoanRequest request) {
+        return submitLoanRequest(request);
+    }
+
     @Override
     public LoanRequest getRequestById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Loan request not found with id: " + id)
+                        new ResourceNotFoundException(
+                                "Loan request not found with id: " + id)
                 );
     }
 

@@ -22,30 +22,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(User user) {
 
-        // 🔒 1. Validate email
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new BadRequestException("Email is required");
         }
 
-        // 🔒 2. Validate password
         if (user.getPassword() == null || user.getPassword().isBlank()) {
             throw new BadRequestException("Password is required");
         }
 
-        // 🔒 3. Check duplicate email (PREVENTS DB 500 ERROR)
         if (repository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already registered");
         }
 
-        // 🔒 4. Encrypt password (MANDATORY)
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // 🔒 5. Save user
         return repository.save(user);
     }
 
     @Override
     public User findByEmail(String email) {
         return repository.findByEmail(email).orElse(null);
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public User getById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 }

@@ -11,18 +11,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
-@Component   // ✅ REQUIRED so Spring can manage this class
+@Component
 public class JwtUtil {
 
-    // 🔒 Keep secret strong (length matters for HS256)
     private static final String SECRET =
             "mySecretKey12345mySecretKey12345";
 
-    private static final long VALIDITY_MS = 60 * 60 * 1000; // 1 hour
+    private static final long VALIDITY_MS = 60 * 60 * 1000;
 
-    // ✅ Correct way to build key for jjwt (avoids runtime errors)
     private static final SecretKey KEY =
             Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+
+    // ✅ REQUIRED BY TESTS
+    public JwtUtil() {}
 
     public String generateToken(String username) {
         return Jwts.builder()
@@ -37,12 +38,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
-
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(KEY)
                 .build()
@@ -50,9 +46,5 @@ public class JwtUtil {
                 .getBody();
 
         return resolver.apply(claims);
-    }
-
-    public boolean isTokenValid(String token) {
-        return extractExpiration(token).after(new Date());
     }
 }
