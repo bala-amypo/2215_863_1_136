@@ -21,8 +21,12 @@ import java.util.Collections;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    // ✅ REQUIRED BY TESTS
+    public JwtFilter() {}
+
     // ✅ Strong enough for HMAC-SHA
-    private static final String SECRET_KEY = "mySecretKey12345mySecretKey12345";
+    private static final String SECRET_KEY =
+            "mySecretKey12345mySecretKey12345";
 
     private static final SecretKey KEY =
             Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
