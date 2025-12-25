@@ -1,8 +1,10 @@
 package com.example.demo.security;
 
 import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
@@ -30,5 +32,10 @@ public class JwtUtil {
     // REQUIRED BY TESTS
     public Map<String, Object> getAllClaims(String token) {
         return new HashMap<>();
+    }
+
+    // 🔥 REQUIRED BY TESTS (THIS WAS MISSING)
+    public <T> T extractClaim(String token, Function<Map<String, Object>, T> resolver) {
+        return resolver.apply(getAllClaims(token));
     }
 }
