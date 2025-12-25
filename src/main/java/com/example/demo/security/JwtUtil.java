@@ -20,7 +20,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // REQUIRED BY TESTS (exact signature)
+    // REQUIRED BY TESTS
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -34,8 +34,10 @@ public class JwtUtil {
         return new HashMap<>();
     }
 
-    // 🔥 REQUIRED BY TESTS (THIS WAS MISSING)
-    public <T> T extractClaim(String token, Function<Map<String, Object>, T> resolver) {
+    // REQUIRED BY TESTS
+    public <T> T extractClaim(
+            String token,
+            Function<Map<String, Object>, T> resolver) {
         return resolver.apply(getAllClaims(token));
     }
 }
