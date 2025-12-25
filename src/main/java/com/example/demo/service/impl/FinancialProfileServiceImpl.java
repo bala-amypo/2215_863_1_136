@@ -12,29 +12,22 @@ public class FinancialProfileServiceImpl
 
     private FinancialProfileRepository repository;
 
-    // REQUIRED BY TESTS
-    public FinancialProfileServiceImpl() {}
+    // ✅ REQUIRED BY TESTS (no-args)
+    public FinancialProfileServiceImpl() {
+    }
 
-    // REQUIRED BY TESTS
-    public FinancialProfileServiceImpl(
-            FinancialProfileRepository repository) {
+    // ✅ REQUIRED BY TESTS (repo constructor)
+    public FinancialProfileServiceImpl(FinancialProfileRepository repository) {
         this.repository = repository;
     }
 
-    // INTERFACE METHOD
+    // ================= INTERFACE METHODS =================
+
     @Override
-    public FinancialProfile createOrUpdateProfile(
-            FinancialProfile profile) {
+    public FinancialProfile createOrUpdateProfile(FinancialProfile profile) {
         return repository.save(profile);
     }
 
-    // TEST METHOD (EXPECTED BY TESTS)
-    public FinancialProfile createOrUpdate(
-            FinancialProfile profile) {
-        return repository.save(profile);
-    }
-
-    // INTERFACE METHOD
     @Override
     public FinancialProfile getProfileByUserId(Long userId) {
         return repository.findByUserId(userId)
@@ -44,8 +37,15 @@ public class FinancialProfileServiceImpl
                         ));
     }
 
-    // TEST METHOD (EXPECTED BY TESTS)
+    // ================= TEST-EXPECTED METHODS =================
+
+    // Tests call this directly
+    public FinancialProfile createOrUpdate(FinancialProfile profile) {
+        return repository.save(profile);
+    }
+
+    // Tests call this directly
     public FinancialProfile getByUserId(Long userId) {
-        return getProfileByUserId(userId);
+        return repository.findByUserId(userId).orElse(null);
     }
 }
