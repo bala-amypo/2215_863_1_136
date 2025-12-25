@@ -20,11 +20,17 @@ public class FinancialProfileServiceImpl implements FinancialProfileService {
         return repository.save(profile);
     }
 
+    // ✅ REQUIRED BY TESTS (alias)
+    public FinancialProfile createOrUpdate(FinancialProfile profile) {
+        return createOrUpdateProfile(profile);
+    }
+
     @Override
     public FinancialProfile getProfileByUserId(Long userId) {
         return repository.findByUserId(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Financial profile not found for user id: " + userId)
+                        new ResourceNotFoundException(
+                                "Financial profile not found for user id: " + userId)
                 );
     }
 }
