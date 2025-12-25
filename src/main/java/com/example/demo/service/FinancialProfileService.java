@@ -6,6 +6,9 @@ public interface FinancialProfileService {
 
     FinancialProfile createOrUpdateProfile(FinancialProfile profile);
 
-    // REQUIRED BY TESTS
+    // USED BY CONTROLLER
+    FinancialProfile getProfileByUserId(Long userId);
+
+    // USED BY TESTS
     FinancialProfile getByUserId(Long userId);
 }
