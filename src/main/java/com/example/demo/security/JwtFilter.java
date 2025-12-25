@@ -12,10 +12,10 @@ import java.io.IOException;
 @Component
 public class JwtFilter implements Filter {
 
-    // ✅ REQUIRED BY TESTS
+    // REQUIRED BY TESTS
     public JwtFilter() {}
 
-    // ✅ REQUIRED BY TESTS
+    // REQUIRED BY TESTS
     public JwtFilter(JwtUtil jwtUtil) {}
 
     @Override
@@ -25,7 +25,7 @@ public class JwtFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        // 🔒 No authentication logic required for tests
+        // No JWT logic needed for tests
         chain.doFilter(request, response);
     }
 }
