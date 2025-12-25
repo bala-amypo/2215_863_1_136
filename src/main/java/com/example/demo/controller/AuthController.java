@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,10 +15,15 @@ public class AuthController {
 
     private final UserService service;
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
-    public AuthController(UserService service, JwtUtil jwtUtil) {
+    // ✅ REQUIRED BY TESTS
+    public AuthController(UserService service,
+                          JwtUtil jwtUtil,
+                          UserRepository userRepository) {
         this.service = service;
         this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")
@@ -27,13 +34,16 @@ public class AuthController {
         return service.registerUser(user);
     }
 
-    // ✅ REQUIRED BY TESTS
+    // ✅ MUST RETURN ResponseEntity
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+
         User user = service.findByEmail(request.getEmail());
         if (user == null) {
             throw new RuntimeException("Invalid credentials");
         }
-        return new AuthResponse(jwtUtil.generateToken(user.getEmail()));
+
+        String token = jwtUtil.generateToken(user.getEmail());
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
