@@ -1,41 +1,25 @@
-package com.example.demo.security;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.crypto.SecretKey;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
+    private JwtUtil jwtUtil;
 
     // ✅ REQUIRED BY TESTS
     public JwtFilter() {}
 
-    // ✅ Strong enough for HMAC-SHA
+    // ✅ REQUIRED BY TESTS
+    public JwtFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     private static final String SECRET_KEY =
             "mySecretKey12345mySecretKey12345";
 
     private static final SecretKey KEY =
             Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    // ✅ Skip auth & swagger endpoints
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-
         return path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/auth");
@@ -51,21 +35,16 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
-            String token = authHeader.substring(7);
-
             try {
                 Claims claims = Jwts.parserBuilder()
                         .setSigningKey(KEY)
                         .build()
-                        .parseClaimsJws(token)
+                        .parseClaimsJws(authHeader.substring(7))
                         .getBody();
-
-                String username = claims.getSubject();
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                username,
+                                claims.getSubject(),
                                 null,
                                 Collections.emptyList()
                         );
@@ -78,8 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);
 
-            } catch (Exception e) {
-                // Invalid token → clear context but do NOT crash
+            } catch (Exception ignored) {
                 SecurityContextHolder.clearContext();
             }
         }
