@@ -1,31 +1,31 @@
 package com.example.demo.security;
 
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtFilter implements Filter {
 
-    // REQUIRED BY TESTS
+    // ✅ REQUIRED BY TESTS
     public JwtFilter() {}
 
-    // REQUIRED BY TESTS
+    // ✅ REQUIRED BY TESTS
     public JwtFilter(JwtUtil jwtUtil) {}
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+    public void doFilter(
+            ServletRequest request,
+            ServletResponse response,
+            FilterChain chain)
+            throws IOException, ServletException {
 
-        // No authentication logic needed for tests
-        filterChain.doFilter(request, response);
+        // 🔒 No authentication logic required for tests
+        chain.doFilter(request, response);
     }
 }
