@@ -15,30 +15,37 @@ public class FinancialProfileServiceImpl
     // REQUIRED BY TESTS
     public FinancialProfileServiceImpl() {}
 
+    // REQUIRED BY TESTS
     public FinancialProfileServiceImpl(
             FinancialProfileRepository repository) {
         this.repository = repository;
     }
 
+    // INTERFACE METHOD
     @Override
     public FinancialProfile createOrUpdateProfile(
             FinancialProfile profile) {
         return repository.save(profile);
     }
 
-    // CONTROLLER METHOD
-    @Override
-    public FinancialProfile getProfileByUserId(Long userId) {
-        return getByUserId(userId);
+    // TEST METHOD (EXPECTED BY TESTS)
+    public FinancialProfile createOrUpdate(
+            FinancialProfile profile) {
+        return repository.save(profile);
     }
 
-    // TEST METHOD
+    // INTERFACE METHOD
     @Override
-    public FinancialProfile getByUserId(Long userId) {
+    public FinancialProfile getProfileByUserId(Long userId) {
         return repository.findByUserId(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Financial profile not found for user id: " + userId
                         ));
+    }
+
+    // TEST METHOD (EXPECTED BY TESTS)
+    public FinancialProfile getByUserId(Long userId) {
+        return getProfileByUserId(userId);
     }
 }
