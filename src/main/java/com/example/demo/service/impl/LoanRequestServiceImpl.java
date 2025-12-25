@@ -30,6 +30,12 @@ public class LoanRequestServiceImpl implements LoanRequestService {
         return repository.save(request);
     }
 
+    // 🔥 THIS METHOD WAS MISSING
+    @Override
+    public LoanRequest getRequestById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
     // REQUIRED BY TESTS
     public LoanRequest getById(Long id) {
         return repository.findById(id).orElse(null);
