@@ -1,65 +1,53 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.LoanDtos;
 import com.example.demo.entity.FinancialProfile;
+import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.FinancialProfileRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FinancialProfileService;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
 
 @Service
 public class FinancialProfileServiceImpl implements FinancialProfileService {
 
-    private FinancialProfileRepository repository;
+    private final FinancialProfileRepository financialProfileRepository;
+    private final UserRepository userRepository;
 
-    // ✅ REQUIRED BY TESTS
-    public FinancialProfileServiceImpl() {
-        // intentionally empty
+    public FinancialProfileServiceImpl(FinancialProfileRepository financialProfileRepository, 
+                                     UserRepository userRepository) {
+        this.financialProfileRepository = financialProfileRepository;
+        this.userRepository = userRepository;
     }
 
-    // ✅ REQUIRED BY TESTS
-    public FinancialProfileServiceImpl(FinancialProfileRepository repository) {
-        this.repository = repository;
-    }
-
-    // ✅ REQUIRED BY TESTS (IMPORTANT)
-    // Tests pass TWO arguments → we must accept them
-    public FinancialProfileServiceImpl(
-            FinancialProfileRepository repository,
-            Object ignored
-    ) {
-        this.repository = repository;
-    }
-
-    // ================= INTERFACE METHOD =================
     @Override
-    public FinancialProfile createOrUpdateProfile(FinancialProfile profile) {
-        if (repository == null) {
-            return profile;
+    public FinancialProfile create(LoanDtos.FinancialProfileDto dto) {
+        if (financialProfileRepository.findByUserId(dto.getUserId()).isPresent()) {
+            throw new BadRequestException("Financial profile already exists");
         }
-        return repository.save(profile);
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        FinancialProfile profile = new FinancialProfile();
+        profile.setUser(user);
+        profile.setMonthlyIncome(dto.getMonthlyIncome());
+        profile.setMonthlyExpenses(dto.getMonthlyExpenses());
+        profile.setExistingLoanEmi(dto.getExistingLoanEmi());
+        profile.setCreditScore(dto.getCreditScore());
+        profile.setSavingsBalance(dto.getSavingsBalance());
+        profile.setLastUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return financialProfileRepository.save(profile);
     }
 
-    // ================= TEST-EXPECTED METHOD =================
-    public FinancialProfile createOrUpdate(FinancialProfile profile) {
-        if (repository == null) {
-            return profile;
-        }
-        return repository.save(profile);
-    }
-
-    // ================= INTERFACE METHOD =================
     @Override
-    public FinancialProfile getProfileByUserId(Long userId) {
-        if (repository == null) {
-            return null;
-        }
-        return repository.findByUserId(userId).orElse(null);
-    }
-
-    // ================= TEST-EXPECTED METHOD =================
     public FinancialProfile getByUserId(Long userId) {
-        if (repository == null) {
-            return null;
-        }
-        return repository.findByUserId(userId).orElse(null);
+        return financialProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Financial profile not found"));
     }
 }

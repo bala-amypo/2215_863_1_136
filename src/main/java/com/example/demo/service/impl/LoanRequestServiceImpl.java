@@ -1,79 +1,63 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.LoanDtos;
 import com.example.demo.entity.LoanRequest;
+import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.LoanRequestRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.LoanRequestService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
 public class LoanRequestServiceImpl implements LoanRequestService {
 
-    private LoanRequestRepository repository;
+    private final LoanRequestRepository loanRequestRepository;
+    private final UserRepository userRepository;
 
-    // ✅ REQUIRED BY TESTS
-    public LoanRequestServiceImpl() {}
-
-    // ✅ REQUIRED BY TESTS
-    public LoanRequestServiceImpl(LoanRequestRepository repository) {
-        this.repository = repository;
-    }
-
-    // ✅ REQUIRED BY TESTS (IMPORTANT)
-    // Tests pass TWO arguments → must exist
-    public LoanRequestServiceImpl(
-            LoanRequestRepository repository,
-            Object ignored
-    ) {
-        this.repository = repository;
-    }
-
-    // ================= INTERFACE METHODS =================
-
-    @Override
-    public LoanRequest submitLoanRequest(LoanRequest request) {
-        if (repository == null) return request;
-        return repository.save(request);
+    public LoanRequestServiceImpl(LoanRequestRepository loanRequestRepository, UserRepository userRepository) {
+        this.loanRequestRepository = loanRequestRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public LoanRequest getRequestById(Long id) {
-        if (repository == null) return null;
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Loan request not found with id: " + id));
+    public LoanRequest create(LoanDtos.LoanRequestDto dto) {
+        if (dto.getRequestedAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Requested amount");
+        }
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        LoanRequest loanRequest = new LoanRequest();
+        loanRequest.setUser(user);
+        loanRequest.setRequestedAmount(dto.getRequestedAmount());
+        loanRequest.setTenureMonths(dto.getTenureMonths());
+        loanRequest.setPurpose(dto.getPurpose());
+        loanRequest.setStatus("PENDING");
+        loanRequest.setAppliedAt(new Timestamp(System.currentTimeMillis()));
+
+        return loanRequestRepository.save(loanRequest);
     }
 
     @Override
-    public List<LoanRequest> getAllRequests() {
-        if (repository == null) return Collections.emptyList();
-        return repository.findAll();
-    }
-
-    // ================= TEST-EXPECTED METHODS =================
-
-    public LoanRequest submitRequest(LoanRequest request) {
-        if (repository == null) return request;
-        return repository.save(request);
+    public List<LoanRequest> getByUserId(Long userId) {
+        return loanRequestRepository.findByUserId(userId);
     }
 
     @Override
     public LoanRequest getById(Long id) {
-        if (repository == null) return null;
-        return repository.findById(id).orElse(null);
+        return loanRequestRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found"));
     }
 
-    public LoanRequest findByLoanRequestId(Long id) {
-        if (repository == null) return null;
-        return repository.findById(id).orElse(null);
-    }
-
-    public List<LoanRequest> getRequestsByUser(Long userId) {
-        if (repository == null) return Collections.emptyList();
-        return repository.findAll();
+    @Override
+    public List<LoanRequest> getAll() {
+        return loanRequestRepository.findAll();
     }
 }
