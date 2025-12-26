@@ -17,11 +17,9 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-    // ✅ REQUIRED BY TESTS (exact constructor)
-    public AuthController(
-            UserService service,
-            JwtUtil jwtUtil,
-            UserRepository userRepository) {
+    public AuthController(UserService service,
+                          JwtUtil jwtUtil,
+                          UserRepository userRepository) {
         this.service = service;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
@@ -35,23 +33,20 @@ public class AuthController {
         return service.registerUser(user);
     }
 
-    // ✅ MUST return ResponseEntity<AuthResponse>
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
-            @RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
-        // 🔒 Use repository directly (tests mock this)
         User user = userRepository
                 .findByEmail(request.getEmail())
                 .orElse(null);
 
         if (user == null) {
-            return ResponseEntity
-                    .status(401)
-                    .body(null);
+            return ResponseEntity.status(401).body(null);
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(new AuthResponse(token));
+
+        // ✅ REQUIRED BY TESTS
+        return ResponseEntity.ok(new AuthResponse(token, user.getEmail()));
     }
 }

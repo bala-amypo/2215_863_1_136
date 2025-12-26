@@ -10,33 +10,22 @@ public class RiskAssessment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // REQUIRED BY TESTS
     private Long loanRequestId;
-
     private Long userId;
-
     private Integer riskScore;
-
-    private String riskLevel;   // LOW, MEDIUM, HIGH
-
+    private String riskLevel;
     private Boolean eligible;
-
-    // 🔥 REQUIRED BY TESTS
     private Double dtiRatio;
 
-    // REQUIRED: no-args constructor
     public RiskAssessment() {
         this.dtiRatio = 0.3;
     }
 
-    // REQUIRED BY TESTS
-    public RiskAssessment(
-            Long loanRequestId,
-            Long userId,
-            Integer riskScore,
-            String riskLevel,
-            Boolean eligible) {
-
+    public RiskAssessment(Long loanRequestId,
+                          Long userId,
+                          Integer riskScore,
+                          String riskLevel,
+                          Boolean eligible) {
         this.loanRequestId = loanRequestId;
         this.userId = userId;
         this.riskScore = riskScore;
@@ -45,15 +34,12 @@ public class RiskAssessment {
         this.dtiRatio = 0.3;
     }
 
-    // OPTIONAL: with id
-    public RiskAssessment(
-            Long id,
-            Long loanRequestId,
-            Long userId,
-            Integer riskScore,
-            String riskLevel,
-            Boolean eligible) {
-
+    public RiskAssessment(Long id,
+                          Long loanRequestId,
+                          Long userId,
+                          Integer riskScore,
+                          String riskLevel,
+                          Boolean eligible) {
         this.id = id;
         this.loanRequestId = loanRequestId;
         this.userId = userId;
@@ -63,66 +49,31 @@ public class RiskAssessment {
         this.dtiRatio = 0.3;
     }
 
-    // ---------- Getters & Setters ----------
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
+    public Long getLoanRequestId() { return loanRequestId; }
+    public void setLoanRequestId(Long loanRequestId) { this.loanRequestId = loanRequestId; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public Integer getRiskScore() { return riskScore; }
+    public void setRiskScore(Integer riskScore) { this.riskScore = riskScore; }
+
+    public String getRiskLevel() { return riskLevel; }
+    public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevel; }
+
+    public Boolean getEligible() { return eligible; }
+    public Boolean getIsEligible() { return eligible; }
+
+    // ✅ REQUIRED BY TESTS
+    public boolean isEligible() {
+        return Boolean.TRUE.equals(eligible);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setEligible(Boolean eligible) { this.eligible = eligible; }
 
-    public Long getLoanRequestId() {
-        return loanRequestId;
-    }
-
-    public void setLoanRequestId(Long loanRequestId) {
-        this.loanRequestId = loanRequestId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Integer getRiskScore() {
-        return riskScore;
-    }
-
-    public void setRiskScore(Integer riskScore) {
-        this.riskScore = riskScore;
-    }
-
-    public String getRiskLevel() {
-        return riskLevel;
-    }
-
-    public void setRiskLevel(String riskLevel) {
-        this.riskLevel = riskLevel;
-    }
-
-    public Boolean getEligible() {
-        return eligible;
-    }
-
-    public Boolean getIsEligible() {
-        return eligible;
-    }
-
-    public void setEligible(Boolean eligible) {
-        this.eligible = eligible;
-    }
-
-    // 🔥 REQUIRED BY TESTS
-    public Double getDtiRatio() {
-        return dtiRatio;
-    }
-
-    public void setDtiRatio(Double dtiRatio) {
-        this.dtiRatio = dtiRatio;
-    }
+    public Double getDtiRatio() { return dtiRatio; }
+    public void setDtiRatio(Double dtiRatio) { this.dtiRatio = dtiRatio; }
 }
