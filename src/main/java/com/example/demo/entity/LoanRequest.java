@@ -1,53 +1,56 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "loan_requests")
+@Table(name = "loan_request")
 public class LoanRequest {
+
+    // ✅ STATUS ENUM (required by tests)
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private BigDecimal requestedAmount;
-
-    @Column(nullable = false)
+    private Double requestedAmount;
     private Integer tenureMonths;
-
-    @Column
     private String purpose;
 
-    @Column(nullable = false)
-    private String status = "PENDING";
+    // 🔹 Stored as String but enum-compatible
+    private String status;
 
-    @Column(nullable = false)
     private Timestamp appliedAt;
 
-    public LoanRequest() {}
+    // ✅ Default constructor (JPA + tests)
+    public LoanRequest() {
+        this.status = Status.PENDING.name();
+        this.appliedAt = new Timestamp(System.currentTimeMillis());
+    }
 
-    public LoanRequest(User user, BigDecimal requestedAmount, Integer tenureMonths, String purpose, 
-                      String status, Timestamp appliedAt) {
+    // ✅ Parameterized constructor
+    public LoanRequest(User user,
+                       Double requestedAmount,
+                       Integer tenureMonths,
+                       String purpose) {
         this.user = user;
         this.requestedAmount = requestedAmount;
         this.tenureMonths = tenureMonths;
         this.purpose = purpose;
-        this.status = status;
-        this.appliedAt = appliedAt;
+        this.status = Status.PENDING.name();
+        this.appliedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    @PrePersist
-    protected void onCreate() {
-        appliedAt = new Timestamp(System.currentTimeMillis());
-    }
-
+    // ✅ ID
     public Long getId() {
         return id;
     }
@@ -56,6 +59,7 @@ public class LoanRequest {
         this.id = id;
     }
 
+    // ✅ User
     public User getUser() {
         return user;
     }
@@ -64,14 +68,16 @@ public class LoanRequest {
         this.user = user;
     }
 
-    public BigDecimal getRequestedAmount() {
+    // ✅ Requested Amount
+    public Double getRequestedAmount() {
         return requestedAmount;
     }
 
-    public void setRequestedAmount(BigDecimal requestedAmount) {
+    public void setRequestedAmount(Double requestedAmount) {
         this.requestedAmount = requestedAmount;
     }
 
+    // ✅ Tenure Months
     public Integer getTenureMonths() {
         return tenureMonths;
     }
@@ -80,6 +86,7 @@ public class LoanRequest {
         this.tenureMonths = tenureMonths;
     }
 
+    // ✅ Purpose
     public String getPurpose() {
         return purpose;
     }
@@ -88,6 +95,7 @@ public class LoanRequest {
         this.purpose = purpose;
     }
 
+    // ✅ Status (String-based, backward compatible)
     public String getStatus() {
         return status;
     }
@@ -96,11 +104,23 @@ public class LoanRequest {
         this.status = status;
     }
 
+    // ✅ Enum-friendly setter (for tests)
+    public void setStatus(Status status) {
+        this.status = status.name();
+    }
+
+    // ✅ Applied At
     public Timestamp getAppliedAt() {
         return appliedAt;
     }
 
     public void setAppliedAt(Timestamp appliedAt) {
         this.appliedAt = appliedAt;
+    }
+
+    // ✅ TEST COMPATIBILITY METHOD
+    // Tests expect getSubmittedAt()
+    public Timestamp getSubmittedAt() {
+        return this.appliedAt;
     }
 }

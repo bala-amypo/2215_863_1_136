@@ -1,13 +1,16 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.LoanDtos;
 import com.example.demo.entity.LoanRequest;
-
 import java.util.List;
 
 public interface LoanRequestService {
-    LoanRequest create(LoanDtos.LoanRequestDto dto);
-    List<LoanRequest> getByUserId(Long userId);
+
+    LoanRequest submitLoanRequest(LoanRequest request);
+
+    // REQUIRED BY TESTS
     LoanRequest getById(Long id);
-    List<LoanRequest> getAll();
+
+    LoanRequest getRequestById(Long id);
+
+    List<LoanRequest> getAllRequests();
 }

@@ -11,6 +11,7 @@ import com.example.demo.service.LoanRequestService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -39,13 +40,14 @@ public class LoanRequestServiceImpl implements LoanRequestService {
         loanRequest.setTenureMonths(dto.getTenureMonths());
         loanRequest.setPurpose(dto.getPurpose());
         loanRequest.setStatus("PENDING");
+        loanRequest.setAppliedAt(new Timestamp(System.currentTimeMillis()));
 
         return loanRequestRepository.save(loanRequest);
     }
 
     @Override
     public List<LoanRequest> getByUserId(Long userId) {
-        return loanRequestRepository.findByUser_Id(userId);
+        return loanRequestRepository.findByUserId(userId);
     }
 
     @Override
