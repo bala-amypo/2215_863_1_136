@@ -8,9 +8,6 @@ import java.util.Optional;
 public interface EligibilityResultRepository
         extends JpaRepository<EligibilityResult, Long> {
 
-    // 🔥 REQUIRED BY SERVICES & TESTS
-    Optional<EligibilityResult> findByLoanRequestId(Long loanRequestId);
-
-    // 🔐 Safety alias (keeps JPA happy if relationship exists)
+    // ✅ ONLY VALID METHOD (relationship-based)
     Optional<EligibilityResult> findByLoanRequest_Id(Long loanRequestId);
 }
