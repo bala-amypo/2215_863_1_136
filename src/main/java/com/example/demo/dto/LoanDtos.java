@@ -1,20 +1,37 @@
 package com.example.demo.dto;
 
+import java.math.BigDecimal;
+
 public class LoanDtos {
 
     public static class LoanRequestDto {
-
-        private Double requestedAmount;
+        private Long userId;
+        private BigDecimal requestedAmount;
         private Integer tenureMonths;
         private String purpose;
 
         public LoanRequestDto() {}
 
-        public Double getRequestedAmount() {
+        public LoanRequestDto(Long userId, BigDecimal requestedAmount, Integer tenureMonths, String purpose) {
+            this.userId = userId;
+            this.requestedAmount = requestedAmount;
+            this.tenureMonths = tenureMonths;
+            this.purpose = purpose;
+        }
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        public BigDecimal getRequestedAmount() {
             return requestedAmount;
         }
 
-        public void setRequestedAmount(Double requestedAmount) {
+        public void setRequestedAmount(BigDecimal requestedAmount) {
             this.requestedAmount = requestedAmount;
         }
 
@@ -36,36 +53,54 @@ public class LoanDtos {
     }
 
     public static class FinancialProfileDto {
-
-        private Double monthlyIncome;
-        private Double monthlyExpenses;
-        private Double existingLoanEmi;
+        private Long userId;
+        private BigDecimal monthlyIncome;
+        private BigDecimal monthlyExpenses;
+        private BigDecimal existingLoanEmi;
         private Integer creditScore;
-        private Double savingsBalance;
+        private BigDecimal savingsBalance;
 
         public FinancialProfileDto() {}
 
-        public Double getMonthlyIncome() {
+        public FinancialProfileDto(Long userId, BigDecimal monthlyIncome, BigDecimal monthlyExpenses, 
+                                 BigDecimal existingLoanEmi, Integer creditScore, BigDecimal savingsBalance) {
+            this.userId = userId;
+            this.monthlyIncome = monthlyIncome;
+            this.monthlyExpenses = monthlyExpenses;
+            this.existingLoanEmi = existingLoanEmi;
+            this.creditScore = creditScore;
+            this.savingsBalance = savingsBalance;
+        }
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        public BigDecimal getMonthlyIncome() {
             return monthlyIncome;
         }
 
-        public void setMonthlyIncome(Double monthlyIncome) {
+        public void setMonthlyIncome(BigDecimal monthlyIncome) {
             this.monthlyIncome = monthlyIncome;
         }
 
-        public Double getMonthlyExpenses() {
+        public BigDecimal getMonthlyExpenses() {
             return monthlyExpenses;
         }
 
-        public void setMonthlyExpenses(Double monthlyExpenses) {
+        public void setMonthlyExpenses(BigDecimal monthlyExpenses) {
             this.monthlyExpenses = monthlyExpenses;
         }
 
-        public Double getExistingLoanEmi() {
+        public BigDecimal getExistingLoanEmi() {
             return existingLoanEmi;
         }
 
-        public void setExistingLoanEmi(Double existingLoanEmi) {
+        public void setExistingLoanEmi(BigDecimal existingLoanEmi) {
             this.existingLoanEmi = existingLoanEmi;
         }
 
@@ -77,11 +112,11 @@ public class LoanDtos {
             this.creditScore = creditScore;
         }
 
-        public Double getSavingsBalance() {
+        public BigDecimal getSavingsBalance() {
             return savingsBalance;
         }
 
-        public void setSavingsBalance(Double savingsBalance) {
+        public void setSavingsBalance(BigDecimal savingsBalance) {
             this.savingsBalance = savingsBalance;
         }
     }

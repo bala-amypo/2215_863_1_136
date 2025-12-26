@@ -1,29 +1,18 @@
 package com.example.demo.dto;
 
 public class AuthResponse {
-
     private String token;
-
-    // 🔹 Optional fields for test compatibility
     private String email;
-    private String username;
+    private String role;
 
-    // ✅ Required by Jackson
     public AuthResponse() {}
 
-    // ✅ Existing constructor
-    public AuthResponse(String token) {
-        this.token = token;
-    }
-
-    // ✅ Extended constructor (tests may use this)
-    public AuthResponse(String token, String email) {
+    public AuthResponse(String token, String email, String role) {
         this.token = token;
         this.email = email;
-        this.username = email;
+        this.role = role;
     }
 
-    // ✅ Token
     public String getToken() {
         return token;
     }
@@ -32,23 +21,19 @@ public class AuthResponse {
         this.token = token;
     }
 
-    // ✅ TEST COMPATIBILITY
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-        this.username = email;
     }
 
-    // ✅ Some tests expect username instead
-    public String getUsername() {
-        return username != null ? username : email;
+    public String getRole() {
+        return role;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-        this.email = username;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
