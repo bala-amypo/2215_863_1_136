@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface RiskAssessmentRepository
         extends JpaRepository<RiskAssessment, Long> {
 
-    // ✅ CORRECT: navigate through entity relationship
-    Optional<RiskAssessment> findByLoanRequest_Id(Long loanRequestId);
+    // 🔥 REQUIRED BY SERVICES & TESTS
+    Optional<RiskAssessment> findByLoanRequestId(Long loanRequestId);
 }
