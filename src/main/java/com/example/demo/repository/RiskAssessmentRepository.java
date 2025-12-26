@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface RiskAssessmentRepository
         extends JpaRepository<RiskAssessment, Long> {
 
-    // 🔥 REQUIRED BY SERVICES & TESTS
-    Optional<RiskAssessment> findByLoanRequestId(Long loanRequestId);
+    // ✅ CORRECT: use the PRIMARY KEY
+    Optional<RiskAssessment> findById(Long loanRequestId);
 }

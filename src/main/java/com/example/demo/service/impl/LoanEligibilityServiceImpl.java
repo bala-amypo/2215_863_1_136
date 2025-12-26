@@ -16,13 +16,13 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService {
 
     @Override
     public EligibilityResult evaluateEligibility(Long loanRequestId) {
-        return repository.findByLoanRequest_Id(loanRequestId)
+        return repository.findByLoanRequestId(loanRequestId)
                 .orElse(null);
     }
 
     @Override
     public EligibilityResult getResultByRequest(Long requestId) {
-        return repository.findByLoanRequest_Id(requestId)
+        return repository.findByLoanRequestId(requestId)
                 .orElse(null);
     }
 }
