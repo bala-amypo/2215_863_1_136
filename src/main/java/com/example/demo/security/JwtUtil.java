@@ -17,10 +17,12 @@ public class JwtUtil {
 
     // ================= TOKEN GENERATION =================
 
+    // 1️⃣
     public String generateToken(String subject) {
         return "dummy-token";
     }
 
+    // 2️⃣
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -29,6 +31,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
+    // 3️⃣ 🔥 MISSING EARLIER
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -39,7 +42,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // ✅ REQUIRED BY TESTS (8 args)
+    // 4️⃣
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -70,8 +73,10 @@ public class JwtUtil {
         return resolver.apply(getAllClaims(token));
     }
 
-    // ================= INNER TEST MAP =================
+    // ================= TEST SUPPORT MAP =================
     private static class TestClaimsMap extends HashMap<String, Object> {
+
+        // 🔥 THIS FIXES: claims.get("key", String.class)
         public <T> T get(String key, Class<T> type) {
             Object value = super.get(key);
             return type.cast(value);
