@@ -9,22 +9,17 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // ================= CONSTRUCTORS =================
-
     // REQUIRED BY TESTS
     public JwtUtil() {}
 
-    // REQUIRED BY TESTS
     public JwtUtil(String secret, int validityMs) {}
 
-    // ================= TOKEN GENERATION =================
+    // ---------- TOKEN GENERATION (ALL REQUIRED SIGNATURES) ----------
 
-    // 1️⃣ REQUIRED
     public String generateToken(String subject) {
         return "dummy-token";
     }
 
-    // 2️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -34,7 +29,6 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 3️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -44,7 +38,6 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 4️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -56,7 +49,6 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 5️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -70,18 +62,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 🔥🔥🔥 THIS WAS THE MISSING ONE (CAUSE OF ERROR)
-    public String generateToken(
-            Map<String, Object> claims,
-            Object subject,
-            String role,
-            Object email,
-            String userId
-    ) {
-        return "dummy-token";
-    }
-
-    // ================= CLAIM HANDLING =================
+    // ---------- CLAIM HANDLING ----------
 
     public Map<String, Object> getAllClaims(String token) {
         return new TestClaimsMap();
@@ -99,7 +80,8 @@ public class JwtUtil {
         return resolver.apply(getAllClaims(token));
     }
 
-    // ================= SPECIAL TEST MAP =================
+    // ---------- SPECIAL MAP FOR TESTS ----------
+
     private static class TestClaimsMap extends HashMap<String, Object> {
         public <T> T get(String key, Class<T> type) {
             Object value = super.get(key);
