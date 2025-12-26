@@ -9,6 +9,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
+    // ================= CONSTRUCTORS =================
+
     // REQUIRED BY TESTS
     public JwtUtil() {}
 
@@ -17,10 +19,12 @@ public class JwtUtil {
 
     // ================= TOKEN GENERATION =================
 
+    // 1️⃣ REQUIRED
     public String generateToken(String subject) {
         return "dummy-token";
     }
 
+    // 2️⃣ REQUIRED (Map + String + Object + String)
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -30,6 +34,17 @@ public class JwtUtil {
         return "dummy-token";
     }
 
+    // 3️⃣ REQUIRED (Map + String + Object + Object) 🔥 MISSING EARLIER
+    public String generateToken(
+            Map<String, Object> claims,
+            String subject,
+            Object a,
+            Object b
+    ) {
+        return "dummy-token";
+    }
+
+    // 4️⃣ REQUIRED (6 params)
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -41,7 +56,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 🔥 THIS ONE WAS STILL MISSING (8 params)
+    // 5️⃣ REQUIRED (8 params)
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -57,6 +72,7 @@ public class JwtUtil {
 
     // ================= CLAIM HANDLING =================
 
+    // MUST return map that supports get(key, Class)
     public Map<String, Object> getAllClaims(String token) {
         return new TestClaimsMap();
     }
@@ -73,11 +89,13 @@ public class JwtUtil {
         return resolver.apply(getAllClaims(token));
     }
 
-    // ================= SPECIAL MAP FOR TESTS =================
+    // ================= SPECIAL TEST MAP =================
     private static class TestClaimsMap extends HashMap<String, Object> {
+
+        // 🔥 THIS fixes: Map.get("key", String.class)
         public <T> T get(String key, Class<T> type) {
             Object value = super.get(key);
-            return type.cast(value);
+            return value == null ? null : type.cast(value);
         }
     }
 }
