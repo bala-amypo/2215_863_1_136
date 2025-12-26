@@ -54,6 +54,7 @@ public class FinancialProfile {
         lastUpdatedAt = new Timestamp(System.currentTimeMillis());
     }
 
+    // ... all getters and setters (same as before)
     public Long getId() {
         return id;
     }
