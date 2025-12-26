@@ -34,6 +34,11 @@ public class RiskAssessmentLog {
         this.timestamp = timestamp;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        timestamp = new Timestamp(System.currentTimeMillis());
+    }
+
     public Long getId() {
         return id;
     }

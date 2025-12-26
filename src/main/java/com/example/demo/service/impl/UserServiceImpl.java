@@ -10,8 +10,6 @@ import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -36,7 +34,6 @@ public class UserServiceImpl implements UserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole() != null ? request.getRole() : "CUSTOMER");
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         userRepository.save(user);
 

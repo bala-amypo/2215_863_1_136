@@ -9,7 +9,6 @@ import com.example.demo.service.LoanEligibilityService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 @Service
 public class LoanEligibilityServiceImpl implements LoanEligibilityService {
@@ -34,14 +33,13 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService {
         result.setMaxEligibleAmount(loanRequest.getRequestedAmount());
         result.setEstimatedEmi(BigDecimal.valueOf(1000));
         result.setRiskLevel("LOW");
-        result.setCalculatedAt(new Timestamp(System.currentTimeMillis()));
 
         return eligibilityResultRepository.save(result);
     }
 
     @Override
     public EligibilityResult getResult(Long loanRequestId) {
-        return eligibilityResultRepository.findByLoanRequestId(loanRequestId)
+        return eligibilityResultRepository.findByLoanRequest_Id(loanRequestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Eligibility result not found"));
     }
 }
