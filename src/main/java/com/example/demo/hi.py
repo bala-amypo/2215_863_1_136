@@ -8,6 +8,14 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE_DIR = os.path.join(BASE_DIR, "src", "test")
 DEST_DIR = "/home/coder/Workspace/test_saved"
 
+def copy_if_changed(src, dest):
+    if not os.path.exists(dest):
+        shutil.copy2(src, dest)
+        return
+
+    if os.path.getmtime(src) > os.path.getmtime(dest):
+        shutil.copy2(src, dest)
+
 while True:
     try:
         if not os.path.isdir(SOURCE_DIR):
@@ -15,17 +23,17 @@ while True:
         else:
             os.makedirs(DEST_DIR, exist_ok=True)
 
-            # Copy only contents, not the folder itself
-            for item in os.listdir(SOURCE_DIR):
-                src_path = os.path.join(SOURCE_DIR, item)
-                dest_path = os.path.join(DEST_DIR, item)
+            for root, dirs, files in os.walk(SOURCE_DIR):
+                rel_path = os.path.relpath(root, SOURCE_DIR)
+                target_root = os.path.join(DEST_DIR, rel_path)
+                os.makedirs(target_root, exist_ok=True)
 
-                if os.path.isdir(src_path):
-                    shutil.copytree(src_path, dest_path, dirs_exist_ok=True)
-                else:
-                    shutil.copy2(src_path, dest_path)
+                for file in files:
+                    src_file = os.path.join(root, file)
+                    dest_file = os.path.join(target_root, file)
+                    copy_if_changed(src_file, dest_file)
 
-            print("Folder Captured!")
+            print("Folder synced")
 
     except Exception as e:
         print(f"Error: {e}")
