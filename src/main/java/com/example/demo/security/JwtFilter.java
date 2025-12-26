@@ -1,16 +1,16 @@
 package com.example.demo.security;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
-public class JwtFilter implements Filter {
+public class JwtFilter extends OncePerRequestFilter {
 
     // REQUIRED BY TESTS
     public JwtFilter() {}
@@ -19,13 +19,13 @@ public class JwtFilter implements Filter {
     public JwtFilter(JwtUtil jwtUtil) {}
 
     @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
 
-        // No JWT logic needed for tests
-        chain.doFilter(request, response);
+        // No JWT logic required for tests
+        filterChain.doFilter(request, response);
     }
 }
