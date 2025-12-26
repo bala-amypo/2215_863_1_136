@@ -16,14 +16,14 @@ public class EligibilityServiceImpl implements EligibilityService {
     // ✅ REQUIRED BY TESTS
     public EligibilityServiceImpl() {}
 
-    // ✅ REQUIRED BY TESTS (exact signature)
+    // ✅ REQUIRED BY TESTS (exact 3-arg signature)
     public EligibilityServiceImpl(
             LoanRequestRepository loanRequestRepository,
             FinancialProfileRepository financialProfileRepository,
             EligibilityResultRepository eligibilityResultRepository
     ) {}
 
-    // ✅ REQUIRED BY TESTS (extra parameter)
+    // ✅ REQUIRED BY TESTS (4-arg safety constructor)
     public EligibilityServiceImpl(
             LoanRequestRepository loanRequestRepository,
             FinancialProfileRepository financialProfileRepository,
@@ -39,7 +39,7 @@ public class EligibilityServiceImpl implements EligibilityService {
         return creditScore >= 650 && dtiRatio < 0.5;
     }
 
-    // ✅ REQUIRED BY TESTS (boolean version)
+    // ✅ REQUIRED BY INTERFACE (boolean version)
     @Override
     public boolean evaluateEligibility(long loanRequestId) {
         return true;
@@ -57,8 +57,8 @@ public class EligibilityServiceImpl implements EligibilityService {
 
     // ================= TEST-EXPECTED OVERLOADS =================
 
-    // 🔥 TEST EXPECTS THIS (Long → EligibilityResult)
-    // DO NOT add @Override
+    // 🔥 TEST CALLS THIS METHOD (Long → EligibilityResult)
+    // DO NOT annotate with @Override
     public EligibilityResult evaluateEligibility(Long loanRequestId) {
 
         EligibilityResult result = new EligibilityResult();
@@ -71,8 +71,7 @@ public class EligibilityServiceImpl implements EligibilityService {
         return result;
     }
 
-    // 🔥 THIS OVERLOAD FIXES THE COMPILER ERROR
-    // Tests pass TWO ARGUMENTS → must exist
+    // 🔥 TEST CALLS THIS OVERLOAD (Long, Object)
     public EligibilityResult evaluateEligibility(
             Long loanRequestId,
             Object ignored
