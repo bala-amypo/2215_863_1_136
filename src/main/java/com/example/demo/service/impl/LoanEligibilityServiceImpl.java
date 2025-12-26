@@ -24,7 +24,7 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService {
     }
 
     @Override
-    public EligibilityResult evaluate(Long loanRequestId) {
+    public EligibilityResult evaluateEligibility(Long loanRequestId) {
         LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Loan request not found"));
 
@@ -32,7 +32,7 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService {
         result.setLoanRequest(loanRequest);
         result.setIsEligible(true);
         result.setMaxEligibleAmount(loanRequest.getRequestedAmount());
-        result.setEstimatedEmi(BigDecimal.valueOf(1000));
+        result.setEstimatedEmi(1000.0);
         result.setRiskLevel("LOW");
         result.setCalculatedAt(new Timestamp(System.currentTimeMillis()));
 
@@ -40,8 +40,8 @@ public class LoanEligibilityServiceImpl implements LoanEligibilityService {
     }
 
     @Override
-    public EligibilityResult getResult(Long loanRequestId) {
-        return eligibilityResultRepository.findByLoanRequestId(loanRequestId)
+    public EligibilityResult getResultByRequest(Long requestId) {
+        return eligibilityResultRepository.findByLoanRequestId(requestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Eligibility result not found"));
     }
 }

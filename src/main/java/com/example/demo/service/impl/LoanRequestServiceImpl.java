@@ -26,8 +26,12 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     }
 
     @Override
+    public LoanRequest submitLoanRequest(LoanRequest request) {
+        return loanRequestRepository.save(request);
+    }
+
     public LoanRequest create(LoanDtos.LoanRequestDto dto) {
-        if (dto.getRequestedAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (dto.getRequestedAmount() <= 0) {
             throw new BadRequestException("Requested amount");
         }
 
@@ -46,6 +50,11 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     }
 
     @Override
+    public LoanRequest getRequestById(Long id) {
+        return loanRequestRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found"));
+    }
+
     public List<LoanRequest> getByUserId(Long userId) {
         return loanRequestRepository.findByUserId(userId);
     }
@@ -57,7 +66,7 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     }
 
     @Override
-    public List<LoanRequest> getAll() {
+    public List<LoanRequest> getAllRequests() {
         return loanRequestRepository.findAll();
     }
 }

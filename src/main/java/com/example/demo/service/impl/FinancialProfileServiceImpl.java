@@ -10,6 +10,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FinancialProfileService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Service
@@ -25,6 +26,10 @@ public class FinancialProfileServiceImpl implements FinancialProfileService {
     }
 
     @Override
+    public FinancialProfile createOrUpdateProfile(FinancialProfile profile) {
+        return financialProfileRepository.save(profile);
+    }
+
     public FinancialProfile create(LoanDtos.FinancialProfileDto dto) {
         if (financialProfileRepository.findByUserId(dto.getUserId()).isPresent()) {
             throw new BadRequestException("Financial profile already exists");
@@ -43,6 +48,12 @@ public class FinancialProfileServiceImpl implements FinancialProfileService {
         profile.setLastUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
         return financialProfileRepository.save(profile);
+    }
+
+    @Override
+    public FinancialProfile getProfileByUserId(Long userId) {
+        return financialProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Financial profile not found"));
     }
 
     @Override

@@ -4,11 +4,20 @@ public class LoanDtos {
 
     public static class LoanRequestDto {
 
+        private Long userId;
         private Double requestedAmount;
         private Integer tenureMonths;
         private String purpose;
 
         public LoanRequestDto() {}
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
 
         public Double getRequestedAmount() {
             return requestedAmount;
@@ -37,6 +46,7 @@ public class LoanDtos {
 
     public static class FinancialProfileDto {
 
+        private Long userId;
         private Double monthlyIncome;
         private Double monthlyExpenses;
         private Double existingLoanEmi;
@@ -44,6 +54,14 @@ public class LoanDtos {
         private Double savingsBalance;
 
         public FinancialProfileDto() {}
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
 
         public Double getMonthlyIncome() {
             return monthlyIncome;
