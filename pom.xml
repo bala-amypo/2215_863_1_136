@@ -17,6 +17,21 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+	<dependencies>
+    <!-- JUnit 5 (included in spring-boot-starter-test) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <!-- H2 for testing -->
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
 	<dependency>
     <groupId>com.h2database</groupId>
     <artifactId>h2</artifactId>
