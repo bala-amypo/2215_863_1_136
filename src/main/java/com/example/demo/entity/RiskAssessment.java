@@ -1,3 +1,4 @@
+// src/main/java/com/example/demo/entity/RiskAssessment.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -10,127 +11,27 @@ public class RiskAssessment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ✅ REQUIRED BY TESTS
-    @Column(name = "loan_request_id")
-    private Long loanRequestId;
+    @OneToOne
+    @JoinColumn(name = "loan_request_id")
+    private LoanRequest loanRequest;
 
-    private Long userId;
+    private Double riskScore;
+    private Double dtiRatio;
 
-    // 🔥 MUST be primitive int (tests fail on Integer)
-    private int riskScore;
+    // getters and setters
+    public Long getId() { return id; }
 
-    private String riskLevel;   // LOW, MEDIUM, HIGH
+    public void setId(Long id) { this.id = id; }
 
-    private boolean eligible;
+    public LoanRequest getLoanRequest() { return loanRequest; }
 
-    // 🔥 REQUIRED BY TESTS
-    private double dtiRatio;
+    public void setLoanRequest(LoanRequest loanRequest) { this.loanRequest = loanRequest; }
 
-    // ================= CONSTRUCTORS =================
+    public Double getRiskScore() { return riskScore; }
 
-    // REQUIRED: no-args constructor
-    public RiskAssessment() {
-        this.dtiRatio = 0.3;
-        this.riskScore = 50;
-        this.riskLevel = "MEDIUM";
-        this.eligible = true;
-    }
+    public void setRiskScore(Double riskScore) { this.riskScore = riskScore; }
 
-    // REQUIRED BY TESTS
-    public RiskAssessment(
-            Long loanRequestId,
-            Long userId,
-            int riskScore,
-            String riskLevel,
-            boolean eligible
-    ) {
-        this.loanRequestId = loanRequestId;
-        this.userId = userId;
-        this.riskScore = riskScore;
-        this.riskLevel = riskLevel;
-        this.eligible = eligible;
-        this.dtiRatio = 0.3;
-    }
+    public Double getDtiRatio() { return dtiRatio; }
 
-    // OPTIONAL WITH ID
-    public RiskAssessment(
-            Long id,
-            Long loanRequestId,
-            Long userId,
-            int riskScore,
-            String riskLevel,
-            boolean eligible
-    ) {
-        this.id = id;
-        this.loanRequestId = loanRequestId;
-        this.userId = userId;
-        this.riskScore = riskScore;
-        this.riskLevel = riskLevel;
-        this.eligible = eligible;
-        this.dtiRatio = 0.3;
-    }
-
-    // ================= GETTERS & SETTERS =================
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getLoanRequestId() {
-        return loanRequestId;
-    }
-
-    public void setLoanRequestId(Long loanRequestId) {
-        this.loanRequestId = loanRequestId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public int getRiskScore() {
-        return riskScore;
-    }
-
-    public void setRiskScore(int riskScore) {
-        this.riskScore = riskScore;
-    }
-
-    public String getRiskLevel() {
-        return riskLevel;
-    }
-
-    public void setRiskLevel(String riskLevel) {
-        this.riskLevel = riskLevel;
-    }
-
-    // 🔥 BOTH REQUIRED BY TESTS
-    public boolean getEligible() {
-        return eligible;
-    }
-
-    public boolean isEligible() {
-        return eligible;
-    }
-
-    public void setEligible(boolean eligible) {
-        this.eligible = eligible;
-    }
-
-    // 🔥 REQUIRED BY TESTS
-    public double getDtiRatio() {
-        return dtiRatio;
-    }
-
-    public void setDtiRatio(double dtiRatio) {
-        this.dtiRatio = dtiRatio;
-    }
+    public void setDtiRatio(Double dtiRatio) { this.dtiRatio = dtiRatio; }
 }

@@ -1,18 +1,22 @@
+// src/main/java/com/example/demo/entity/FinancialProfile.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
-@Table(name = "financial_profile")
+@Table(
+        name = "financial_profiles",
+        uniqueConstraints = @UniqueConstraint(columnNames = "user_id")
+)
 public class FinancialProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "user_id", unique = true)
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private Double monthlyIncome;
@@ -21,103 +25,45 @@ public class FinancialProfile {
     private Integer creditScore;
     private Double savingsBalance;
 
-    private Timestamp lastUpdatedAt;
+    private Instant lastUpdatedAt;
 
-    // ✅ 1. Default constructor (REQUIRED by JPA)
-    public FinancialProfile() {
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
+    @PrePersist
+    @PreUpdate
+    public void prePersistOrUpdate() {
+        // t29_entity_prepersist_timestamps expects this to be set when createOrUpdate is called
+        lastUpdatedAt = Instant.now();
     }
 
-    // ✅ 2. Parameterized constructor (used in services & tests)
-    public FinancialProfile(User user,
-                            Double monthlyIncome,
-                            Double monthlyExpenses,
-                            Double existingLoanEmi,
-                            Integer creditScore,
-                            Double savingsBalance) {
-        this.user = user;
-        this.monthlyIncome = monthlyIncome;
-        this.monthlyExpenses = monthlyExpenses;
-        this.existingLoanEmi = existingLoanEmi;
-        this.creditScore = creditScore;
-        this.savingsBalance = savingsBalance;
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    // getters and setters
+    public Long getId() { return id; }
 
-    // ✅ 3. ID (getter + setter REQUIRED for tests)
-    public Long getId() {
-        return id;
-    }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public User getUser() { return user; }
 
-    // ✅ 4. User
-    public User getUser() {
-        return user;
-    }
+    public void setUser(User user) { this.user = user; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public Double getMonthlyIncome() { return monthlyIncome; }
 
-    // ✅ 5. Monthly Income
-    public Double getMonthlyIncome() {
-        return monthlyIncome;
-    }
+    public void setMonthlyIncome(Double monthlyIncome) { this.monthlyIncome = monthlyIncome; }
 
-    public void setMonthlyIncome(Double monthlyIncome) {
-        this.monthlyIncome = monthlyIncome;
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    public Double getMonthlyExpenses() { return monthlyExpenses; }
 
-    // ✅ 6. Monthly Expenses
-    public Double getMonthlyExpenses() {
-        return monthlyExpenses;
-    }
+    public void setMonthlyExpenses(Double monthlyExpenses) { this.monthlyExpenses = monthlyExpenses; }
 
-    public void setMonthlyExpenses(Double monthlyExpenses) {
-        this.monthlyExpenses = monthlyExpenses;
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    public Double getExistingLoanEmi() { return existingLoanEmi; }
 
-    // ✅ 7. Existing Loan EMI
-    public Double getExistingLoanEmi() {
-        return existingLoanEmi;
-    }
+    public void setExistingLoanEmi(Double existingLoanEmi) { this.existingLoanEmi = existingLoanEmi; }
 
-    public void setExistingLoanEmi(Double existingLoanEmi) {
-        this.existingLoanEmi = existingLoanEmi;
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    public Integer getCreditScore() { return creditScore; }
 
-    // ✅ 8. Credit Score
-    public Integer getCreditScore() {
-        return creditScore;
-    }
+    public void setCreditScore(Integer creditScore) { this.creditScore = creditScore; }
 
-    public void setCreditScore(Integer creditScore) {
-        this.creditScore = creditScore;
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    public Double getSavingsBalance() { return savingsBalance; }
 
-    // ✅ 9. Savings Balance
-    public Double getSavingsBalance() {
-        return savingsBalance;
-    }
+    public void setSavingsBalance(Double savingsBalance) { this.savingsBalance = savingsBalance; }
 
-    public void setSavingsBalance(Double savingsBalance) {
-        this.savingsBalance = savingsBalance;
-        this.lastUpdatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    public Instant getLastUpdatedAt() { return lastUpdatedAt; }
 
-    // ✅ 10. Last Updated Timestamp
-    public Timestamp getLastUpdatedAt() {
-        return lastUpdatedAt;
-    }
-
-    public void setLastUpdatedAt(Timestamp lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
+    public void setLastUpdatedAt(Instant lastUpdatedAt) { this.lastUpdatedAt = lastUpdatedAt; }
 }
