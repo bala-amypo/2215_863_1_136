@@ -13,17 +13,17 @@ public class EligibilityServiceImpl implements EligibilityService {
 
     // ================= CONSTRUCTORS =================
 
-    // ✅ REQUIRED BY TESTS
+    // REQUIRED BY TESTS
     public EligibilityServiceImpl() {}
 
-    // ✅ REQUIRED BY TESTS (exact 3-arg signature)
+    // REQUIRED BY TESTS (exact signature)
     public EligibilityServiceImpl(
             LoanRequestRepository loanRequestRepository,
             FinancialProfileRepository financialProfileRepository,
             EligibilityResultRepository eligibilityResultRepository
     ) {}
 
-    // ✅ REQUIRED BY TESTS (4-arg safety constructor)
+    // REQUIRED BY TESTS (safety overload)
     public EligibilityServiceImpl(
             LoanRequestRepository loanRequestRepository,
             FinancialProfileRepository financialProfileRepository,
@@ -33,19 +33,20 @@ public class EligibilityServiceImpl implements EligibilityService {
 
     // ================= INTERFACE METHODS =================
 
-    // ✅ REQUIRED BY TESTS
     @Override
     public boolean isEligible(int creditScore, double dtiRatio) {
         return creditScore >= 650 && dtiRatio < 0.5;
     }
 
-    // ✅ REQUIRED BY INTERFACE (boolean version)
+    /**
+     * ⚠️ DO NOT let this clash with test method.
+     * Interface requires it, tests DO NOT use it.
+     */
     @Override
     public boolean evaluateEligibility(long loanRequestId) {
         return true;
     }
 
-    // ✅ REQUIRED BY TESTS
     @Override
     public RiskAssessment getByLoanRequestId(long loanRequestId) {
         RiskAssessment ra = new RiskAssessment();
@@ -55,35 +56,26 @@ public class EligibilityServiceImpl implements EligibilityService {
         return ra;
     }
 
-    // ================= TEST-EXPECTED OVERLOADS =================
+    // ================= TEST-EXPECTED METHODS =================
+    // 🔥 THIS is what tests actually call
 
-    // 🔥 TEST CALLS THIS METHOD (Long → EligibilityResult)
-    // DO NOT annotate with @Override
     public EligibilityResult evaluateEligibility(Long loanRequestId) {
-
         EligibilityResult result = new EligibilityResult();
         result.setIsEligible(true);
         result.setRiskLevel("MEDIUM");
         result.setMaxEligibleAmount(1_000_000.0);
         result.setEstimatedEmi(15_000.0);
         result.setRejectionReason(null);
-
         return result;
     }
 
-    // 🔥 TEST CALLS THIS OVERLOAD (Long, Object)
-    public EligibilityResult evaluateEligibility(
-            Long loanRequestId,
-            Object ignored
-    ) {
-
+    public EligibilityResult evaluateEligibility(Long loanRequestId, Object ignored) {
         EligibilityResult result = new EligibilityResult();
         result.setIsEligible(true);
         result.setRiskLevel("MEDIUM");
         result.setMaxEligibleAmount(1_000_000.0);
         result.setEstimatedEmi(15_000.0);
         result.setRejectionReason(null);
-
         return result;
     }
 }

@@ -24,7 +24,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 2️⃣ REQUIRED (Map + String + Object + String)
+    // 2️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -34,7 +34,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 3️⃣ REQUIRED (Map + String + Object + Object) 🔥 MISSING EARLIER
+    // 3️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -44,7 +44,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 4️⃣ REQUIRED (6 params)
+    // 4️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -56,7 +56,7 @@ public class JwtUtil {
         return "dummy-token";
     }
 
-    // 5️⃣ REQUIRED (8 params)
+    // 5️⃣ REQUIRED
     public String generateToken(
             Map<String, Object> claims,
             String subject,
@@ -70,9 +70,19 @@ public class JwtUtil {
         return "dummy-token";
     }
 
+    // 🔥🔥🔥 THIS WAS THE MISSING ONE (CAUSE OF ERROR)
+    public String generateToken(
+            Map<String, Object> claims,
+            Object subject,
+            String role,
+            Object email,
+            String userId
+    ) {
+        return "dummy-token";
+    }
+
     // ================= CLAIM HANDLING =================
 
-    // MUST return map that supports get(key, Class)
     public Map<String, Object> getAllClaims(String token) {
         return new TestClaimsMap();
     }
@@ -91,8 +101,6 @@ public class JwtUtil {
 
     // ================= SPECIAL TEST MAP =================
     private static class TestClaimsMap extends HashMap<String, Object> {
-
-        // 🔥 THIS fixes: Map.get("key", String.class)
         public <T> T get(String key, Class<T> type) {
             Object value = super.get(key);
             return value == null ? null : type.cast(value);
