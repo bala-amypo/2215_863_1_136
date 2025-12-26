@@ -10,6 +10,13 @@ import java.sql.Timestamp;
 )
 public class User {
 
+    // ✅ ROLE ENUM (required by tests)
+    public enum Role {
+        USER,
+        ADMIN,
+        CUSTOMER
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,16 +24,19 @@ public class User {
     private String fullName;
     private String email;
     private String password;
-    private String role = "CUSTOMER";
+
+    // 🔹 Stored as String for DB compatibility
+    private String role = Role.CUSTOMER.name();
 
     private Timestamp createdAt;
 
     // ✅ 1. Default constructor (MANDATORY for JPA)
     public User() {
         this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.role = Role.CUSTOMER.name();
     }
 
-    // ✅ 2. Parameterized constructor
+    // ✅ 2. Parameterized constructor (String role)
     public User(String fullName, String email, String password, String role) {
         this.fullName = fullName;
         this.email = email;
@@ -35,7 +45,16 @@ public class User {
         this.createdAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // ✅ 3. Getter & Setter for ID (IMPORTANT for tests)
+    // ✅ 2️⃣ Alternate constructor (ENUM role – for tests)
+    public User(String fullName, String email, String password, Role role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role.name();
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    // ✅ 3. ID (IMPORTANT for tests)
     public Long getId() {
         return id;
     }
@@ -71,13 +90,26 @@ public class User {
         this.password = password;
     }
 
-    // ✅ 7. Role
+    // ✅ 7. Role (String-based – existing code)
     public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    // ✅ 7️⃣ Enum-based Role access (for tests)
+    public Role getRoleEnum() {
+        try {
+            return Role.valueOf(this.role);
+        } catch (Exception e) {
+            return Role.CUSTOMER;
+        }
+    }
+
+    public void setRole(Role role) {
+        this.role = role.name();
     }
 
     // ✅ 8. Created At

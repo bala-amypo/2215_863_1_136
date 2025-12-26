@@ -7,6 +7,13 @@ import java.sql.Timestamp;
 @Table(name = "loan_request")
 public class LoanRequest {
 
+    // ✅ STATUS ENUM (required by tests)
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,17 +25,19 @@ public class LoanRequest {
     private Double requestedAmount;
     private Integer tenureMonths;
     private String purpose;
+
+    // 🔹 Stored as String but enum-compatible
     private String status;
 
     private Timestamp appliedAt;
 
-    // ✅ 1. Default constructor (REQUIRED by JPA)
+    // ✅ Default constructor (JPA + tests)
     public LoanRequest() {
-        this.status = "PENDING";
+        this.status = Status.PENDING.name();
         this.appliedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // ✅ 2. Parameterized constructor (used in services & tests)
+    // ✅ Parameterized constructor
     public LoanRequest(User user,
                        Double requestedAmount,
                        Integer tenureMonths,
@@ -37,11 +46,11 @@ public class LoanRequest {
         this.requestedAmount = requestedAmount;
         this.tenureMonths = tenureMonths;
         this.purpose = purpose;
-        this.status = "PENDING";
+        this.status = Status.PENDING.name();
         this.appliedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // ✅ 3. ID (getter + setter REQUIRED for tests)
+    // ✅ ID
     public Long getId() {
         return id;
     }
@@ -50,7 +59,7 @@ public class LoanRequest {
         this.id = id;
     }
 
-    // ✅ 4. User
+    // ✅ User
     public User getUser() {
         return user;
     }
@@ -59,7 +68,7 @@ public class LoanRequest {
         this.user = user;
     }
 
-    // ✅ 5. Requested Amount
+    // ✅ Requested Amount
     public Double getRequestedAmount() {
         return requestedAmount;
     }
@@ -68,7 +77,7 @@ public class LoanRequest {
         this.requestedAmount = requestedAmount;
     }
 
-    // ✅ 6. Tenure Months
+    // ✅ Tenure Months
     public Integer getTenureMonths() {
         return tenureMonths;
     }
@@ -77,7 +86,7 @@ public class LoanRequest {
         this.tenureMonths = tenureMonths;
     }
 
-    // ✅ 7. Purpose
+    // ✅ Purpose
     public String getPurpose() {
         return purpose;
     }
@@ -86,7 +95,7 @@ public class LoanRequest {
         this.purpose = purpose;
     }
 
-    // ✅ 8. Status
+    // ✅ Status (String-based, backward compatible)
     public String getStatus() {
         return status;
     }
@@ -95,12 +104,23 @@ public class LoanRequest {
         this.status = status;
     }
 
-    // ✅ 9. Applied At
+    // ✅ Enum-friendly setter (for tests)
+    public void setStatus(Status status) {
+        this.status = status.name();
+    }
+
+    // ✅ Applied At
     public Timestamp getAppliedAt() {
         return appliedAt;
     }
 
     public void setAppliedAt(Timestamp appliedAt) {
         this.appliedAt = appliedAt;
+    }
+
+    // ✅ TEST COMPATIBILITY METHOD
+    // Tests expect getSubmittedAt()
+    public Timestamp getSubmittedAt() {
+        return this.appliedAt;
     }
 }
