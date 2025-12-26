@@ -48,6 +48,11 @@ public class EligibilityResult {
         this.calculatedAt = calculatedAt;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        calculatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
     public Long getId() {
         return id;
     }

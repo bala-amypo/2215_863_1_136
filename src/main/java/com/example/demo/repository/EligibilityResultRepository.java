@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface EligibilityResultRepository extends JpaRepository<EligibilityResult, Long> {
-    Optional<EligibilityResult> findByLoanRequestId(Long loanRequestId);
+    Optional<EligibilityResult> findByLoanRequest_Id(Long loanRequestId);
 }

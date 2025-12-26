@@ -48,6 +48,12 @@ public class FinancialProfile {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
+    @PrePersist
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
     public Long getId() {
         return id;
     }

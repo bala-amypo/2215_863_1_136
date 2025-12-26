@@ -43,6 +43,11 @@ public class LoanRequest {
         this.appliedAt = appliedAt;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        appliedAt = new Timestamp(System.currentTimeMillis());
+    }
+
     public Long getId() {
         return id;
     }

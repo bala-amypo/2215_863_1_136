@@ -36,6 +36,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
     public Long getId() {
         return id;
     }
