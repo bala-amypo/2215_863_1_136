@@ -1,4 +1,3 @@
-// src/main/java/com/example/demo/service/impl/RiskAssessmentServiceImpl.java
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.RiskAssessment;
@@ -11,8 +10,10 @@ import com.example.demo.repository.LoanRequestRepository;
 import com.example.demo.repository.FinancialProfileRepository;
 import com.example.demo.service.RiskAssessmentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RiskAssessmentServiceImpl implements RiskAssessmentService {
@@ -30,6 +31,7 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
     }
 
     @Override
+    @Transactional
     public RiskAssessment assessRisk(Long loanRequestId) {
         LoanRequest request = loanRequestRepository.findById(loanRequestId)
                 .orElseThrow(() -> new ResourceNotFoundException("LoanRequest not found"));
@@ -66,10 +68,27 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Risk not found"));
     }
 
-    // CRUD-style methods for controller
-
+    // ============================
+    // ✅ FIXED METHOD (ONLY ADD LOGIC)
+    // ============================
     @Override
+    @Transactional
     public RiskAssessment postData5(RiskAssessment riskAssessment) {
+
+        Long loanRequestId = riskAssessment.getLoanRequest().getId();
+
+        Optional<RiskAssessment> existing =
+                riskAssessmentRepository.findByLoanRequestId(loanRequestId);
+
+        if (existing.isPresent()) {
+            // ✅ UPDATE instead of INSERT
+            RiskAssessment ra = existing.get();
+            ra.setRiskScore(riskAssessment.getRiskScore());
+            ra.setDtiRatio(riskAssessment.getDtiRatio());
+            return riskAssessmentRepository.save(ra);
+        }
+
+        // ✅ INSERT only if not exists
         return riskAssessmentRepository.save(riskAssessment);
     }
 
