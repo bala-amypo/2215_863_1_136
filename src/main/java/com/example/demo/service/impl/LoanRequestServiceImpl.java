@@ -1,4 +1,3 @@
-// src/main/java/com/example/demo/service/impl/LoanRequestServiceImpl.java
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.LoanRequest;
@@ -9,6 +8,7 @@ import com.example.demo.repository.LoanRequestRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.LoanRequestService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -26,6 +26,7 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     }
 
     @Override
+    @Transactional   // ✅ ADDED — fixes 500 error
     public LoanRequest submitRequest(LoanRequest request) {
 
         if (request.getRequestedAmount() == null || request.getRequestedAmount() <= 0) {
@@ -37,13 +38,11 @@ public class LoanRequestServiceImpl implements LoanRequestService {
             throw new ResourceNotFoundException("User not found");
         }
 
-        // ✅ FIX: attach managed User entity
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         request.setUser(user);
 
-        // ✅ defaults (kept exactly as your logic)
         if (request.getStatus() == null) {
             request.setStatus(LoanRequest.Status.PENDING.name());
         }
