@@ -14,27 +14,29 @@ public class LoanRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Double requestedAmount;
 
+    @Column(nullable = false)
     private Integer tenureMonths;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    // 🔴 FIX: user must be non-null & managed
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // stored as String because tests compare to LoanRequest.Status.PENDING.name()
+    @Column(nullable = false)
     private String status;
 
+    @Column(nullable = false)
     private Instant submittedAt;
 
     @PrePersist
     public void prePersist() {
-        // t28_loan_request_persist_sets_defaults:
-        // if status not set before save, default to PENDING
         if (status == null) {
             status = Status.PENDING.name();
         }
-        // if submittedAt not set, initialize now
         if (submittedAt == null) {
             submittedAt = Instant.now();
         }
