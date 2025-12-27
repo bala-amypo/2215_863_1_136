@@ -27,16 +27,23 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public LoanRequest submitRequest(LoanRequest request) {
+
         if (request.getRequestedAmount() == null || request.getRequestedAmount() <= 0) {
             throw new BadRequestException("Amount must be > 0");
         }
 
         Long userId = request.getUser() != null ? request.getUser().getId() : null;
-        if (userId == null || userRepository.findById(userId).isEmpty()) {
+        if (userId == null) {
             throw new ResourceNotFoundException("User not found");
         }
 
-        // Explicitly set defaults so tests see them even with mocked repo (t28)
+        // ✅ FIX: attach managed User entity
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        request.setUser(user);
+
+        // ✅ defaults (kept exactly as your logic)
         if (request.getStatus() == null) {
             request.setStatus(LoanRequest.Status.PENDING.name());
         }
