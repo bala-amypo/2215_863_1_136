@@ -1,7 +1,9 @@
 // src/main/java/com/example/demo/entity/LoanRequest.java
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
 import java.time.Instant;
 
 @Entity
@@ -20,12 +22,13 @@ public class LoanRequest {
     @Column(nullable = false)
     private Integer tenureMonths;
 
-    // 🔴 FIX: user must be non-null & managed
+    // 🔧 FIX: prevent lazy-loading JSON serialization error
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
-    // stored as String because tests compare to LoanRequest.Status.PENDING.name()
+    // stored as String because tests compare to Status.PENDING.name()
     @Column(nullable = false)
     private String status;
 
@@ -49,11 +52,15 @@ public class LoanRequest {
 
     public Double getRequestedAmount() { return requestedAmount; }
 
-    public void setRequestedAmount(Double requestedAmount) { this.requestedAmount = requestedAmount; }
+    public void setRequestedAmount(Double requestedAmount) {
+        this.requestedAmount = requestedAmount;
+    }
 
     public Integer getTenureMonths() { return tenureMonths; }
 
-    public void setTenureMonths(Integer tenureMonths) { this.tenureMonths = tenureMonths; }
+    public void setTenureMonths(Integer tenureMonths) {
+        this.tenureMonths = tenureMonths;
+    }
 
     public User getUser() { return user; }
 
@@ -65,5 +72,7 @@ public class LoanRequest {
 
     public Instant getSubmittedAt() { return submittedAt; }
 
-    public void setSubmittedAt(Instant submittedAt) { this.submittedAt = submittedAt; }
+    public void setSubmittedAt(Instant submittedAt) {
+        this.submittedAt = submittedAt;
+    }
 }
