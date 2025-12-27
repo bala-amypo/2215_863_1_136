@@ -29,27 +29,50 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Single login method – do not duplicate this
+    // ✅ REGISTER API
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody User user) {
+
+        // check email already exists
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email already registered");
+        }
+
+        // encrypt password
+        user.setPassword(encoder.encode(user.getPassword()));
+
+        // default role
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
+
+        // save user
+        userRepository.save(user);
+
+        return ResponseEntity.ok("User registered successfully");
+    }
+
+    // ✅ LOGIN API (unchanged)
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        // fetch user by email (t45_authcontroller_login_positive)
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-        // verify password using BCrypt (test hashes password then calls login)
         if (!encoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // build JWT claims
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("userId", user.getId());
         claims.put("role", user.getRole());
 
-        // generate token and respond
         String token = jwtUtil.generateToken(claims, user.getEmail());
         AuthResponse resp = new AuthResponse(token, user.getEmail());
+
         return ResponseEntity.ok(resp);
     }
 }
