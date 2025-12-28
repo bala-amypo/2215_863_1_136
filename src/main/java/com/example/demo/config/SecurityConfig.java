@@ -22,12 +22,16 @@ public class SecurityConfig {
                     "/v3/api-docs/**"
                 ).authenticated()
 
-                // Other APIs also secured
+                // APIs also secured
                 .anyRequest().authenticated()
             )
 
-            // 🔐 Username / Password popup
-            .httpBasic();
+            // ✅ SESSION-BASED LOGIN (LOGIN ONCE)
+            .formLogin(form -> form
+                .defaultSuccessUrl("/swagger-ui/index.html", true)
+            )
+
+            .logout(logout -> logout.logoutSuccessUrl("/login"));
 
         return http.build();
     }
