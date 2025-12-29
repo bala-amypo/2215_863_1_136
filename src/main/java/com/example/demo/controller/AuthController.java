@@ -29,32 +29,26 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // ✅ REGISTER API
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
 
-        // check email already exists
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body("Email already registered");
         }
 
-        // encrypt password
         user.setPassword(encoder.encode(user.getPassword()));
 
-        // default role
         if (user.getRole() == null) {
             user.setRole("USER");
         }
 
-        // save user
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully");
     }
 
-    // ✅ LOGIN API (unchanged)
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
